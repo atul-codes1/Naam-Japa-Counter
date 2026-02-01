@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'; // eslint-disable-line no-unused-vars
 import { useLocation } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 

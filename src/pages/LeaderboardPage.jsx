@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react'; // eslint-disable-line no-unused-vars
 import LeaderboardTable from '../components/leaderboard/LeaderboardTable';
 import useAuth from '../hooks/useAuth';
 
