@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0%" stop-color="#FF80AB"/>
+      <stop offset="100%" stop-color="#FF4081"/>
+    </linearGradient>
+    <style>
+      .bg { fill:#FFF7FB }
+      .card { fill:white; stroke:rgba(136,14,79,0.06); rx:16 }
+      .title { font: 700 20px/1.2 'Segoe UI', Roboto, sans-serif; fill:#880E4F }
+      .kpi { font: 700 28px/1 'Segoe UI', Roboto, sans-serif; fill:#222 }
+      .muted { font: 400 13px/1 'Segoe UI', Roboto, sans-serif; fill:#666 }
+      .pink { fill:url(#g1) }
+      .btn { fill:url(#g1); rx:10 }
+    </style>
+  </defs>
+
+  <!-- background -->
+  <rect class="bg" width="1200" height="760" />
+
+  <!-- Header -->
+  <rect x="24" y="20" width="1152" height="84" rx="12" class="card" />
+  <text x="48" y="60" class="title">Welcome, Atul</text>
+  <rect x="1040" y="36" width="120" height="40" class="btn" />
+  <text x="1096" y="62" text-anchor="middle" fill="white" font="700 14px/1 'Segoe UI'">Sync</text>
+
+  <!-- Row A: 4 KPI cards -->
+  <g>
+    <rect x="24" y="120" width="268" height="120" rx="12" class="card" />
+    <text x="44" y="150" class="muted">Today's Japa</text>
+    <text x="44" y="190" class="kpi">1,250</text>
+
+    <rect x="314" y="120" width="268" height="120" rx="12" class="card" />
+    <text x="334" y="150" class="muted">Current Count</text>
+    <text x="334" y="190" class="kpi">27</text>
+
+    <rect x="604" y="120" width="268" height="120" rx="12" class="card" />
+    <text x="624" y="150" class="muted">Total Malas</text>
+    <text x="624" y="190" class="kpi">42</text>
+
+    <rect x="894" y="120" width="268" height="120" rx="12" class="card" />
+    <text x="914" y="150" class="muted">Current Streak</text>
+    <text x="914" y="190" class="kpi">5 days</text>
+  </g>
+
+  <!-- Row B: Action strip -->
+  <rect x="24" y="260" width="1152" height="72" rx="12" class="card" />
+  <rect x="44" y="278" width="160" height="44" class="btn" />
+  <text x="124" y="307" text-anchor="middle" fill="white" font="700 14px/1 'Segoe UI'">Start Japa</text>
+  <rect x="220" y="278" width="160" height="44" rx="10" fill="#fff" stroke="rgba(136,14,79,0.06)" />
+  <text x="300" y="307" text-anchor="middle" fill="#880E4F" font="700 14px/1 'Segoe UI'">Complete Mala</text>
+  <rect x="396" y="278" width="160" height="44" class="btn" />
+  <text x="476" y="307" text-anchor="middle" fill="white" font="700 14px/1 'Segoe UI'">Quick Sync</text>
+
+  <!-- Row C: Left - mini chart, Right - leaderboard preview -->
+  <rect x="24" y="356" width="760" height="340" rx="12" class="card" />
+  <text x="44" y="386" class="title">7‑Day Progress</text>
+  <!-- mini sparkline placeholder -->
+  <polyline points="60,430 120,420 180,440 240,410 300,430 360,400 420,420 480,410 540,420" fill="none" stroke="#FF4081" stroke-width="4" stroke-linecap="round" />
+
+  <rect x="800" y="356" width="376" height="200" rx="12" class="card" />
+  <text x="820" y="386" class="title">Leaderboard (Preview)</text>
+  <g>
+    <rect x="820" y="404" width="56" height="56" rx="8" fill="#FFD700" />
+    <text x="888" y="440" class="muted">1. Rahul — 2,160</text>
+    <rect x="820" y="468" width="56" height="56" rx="8" fill="#C0C0C0" />
+    <text x="888" y="504" class="muted">2. Priya — 1,890</text>
+    <rect x="820" y="532" width="56" height="56" rx="8" fill="#CD7F32" />
+    <text x="888" y="568" class="muted">3. You — 1,450</text>
+  </g>
+  <rect x="980" y="532" width="196" height="44" rx="10" class="btn" />
+  <text x="1078" y="561" text-anchor="middle" fill="white" font="700 14px/1 'Segoe UI'">View Full Leaderboard</text>
+
+  <!-- Row D: Recent Activity + profile -->
+  <rect x="24" y="714" width="760" height="28" fill="transparent" />
+  <rect x="24" y="712" width="760" height="36" rx="10" fill="rgba(0,0,0,0.03)" />
+  <text x="44" y="734" class="muted">Recent activity: Completed a mala • Synced 2h ago • Last login today</text>
+
+  <rect x="800" y="572" width="376" height="124" rx="12" class="card" />
+  <text x="820" y="602" class="title">Profile</text>
+  <text x="820" y="632" class="muted">Atul • +91 98765 43210</text>
+  <rect x="1000" y="646" width="160" height="36" rx="8" class="btn" />
+  <text x="1080" y="670" text-anchor="middle" fill="white" font="700 12px/1 'Segoe UI'">Edit Profile</text>
+
+</svg>
