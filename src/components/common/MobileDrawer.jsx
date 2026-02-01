@@ -15,6 +15,7 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
                 <Link to="/premanand-ji-maharaj" className="drawer-item" onClick={onClose} style={{ textDecoration: 'none', display: 'block' }}>Premanand Ji Maharaj</Link>
                 <Link to="/naam-japa-counter" className="drawer-item" onClick={onClose} style={{ textDecoration: 'none', display: 'block' }}>Naam Library</Link>
                 <Link to="/statistics" className="drawer-item" onClick={onClose} style={{ textDecoration: 'none', display: 'block' }}>Insights (Statistics)</Link>
+                <Link to="/leaderboard" className="drawer-item" onClick={onClose} style={{ textDecoration: 'none', display: 'block' }}>Leaderboard</Link>
                 <div className="drawer-divider" />
                 <div style={{ padding: '16px' }}>
                     <FlashingStreakChallenge />
