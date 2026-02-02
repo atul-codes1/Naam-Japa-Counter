@@ -9,6 +9,12 @@ const FullCenteredBackground = () => {
         let animationId;
 
         const animate = () => {
+            // Stop animation if tab is hidden to save battery
+            if (document.hidden) {
+                animationId = requestAnimationFrame(animate);
+                return;
+            }
+
             const elapsed = Date.now() - startTime;
             const progress = (elapsed % 20000) / 20000;
             const value = progress < 0.5

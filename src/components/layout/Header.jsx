@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import PlayStoreBadge from './PlayStoreBadge';
+
 import useAuth from '../../hooks/useAuth';
 
 const Header = ({ activeNaam, isDesktop, onMenuClick }) => {
@@ -14,19 +14,18 @@ const Header = ({ activeNaam, isDesktop, onMenuClick }) => {
                         <HoverNavButton label="Home" to="/" />
                         <HoverNavButton label="Premanand Ji" to="/premanand-ji-maharaj" />
                         <HoverNavButton label="Naam Library" to="/naam-japa-counter" />
-                        <HoverNavButton label="Insights" to="/statistics" />
-                        <HoverNavButton label="Leaderboard" to="/leaderboard" />
+                        <HoverNavButton label="My Journey" to="/statistics" />
+                        <HoverNavButton label="Global Rank" to="/leaderboard" />
                         <div style={{ width: '18px' }} />
                         <HeaderAuth />
                         <div style={{ width: '18px' }} />
-                        <PlayStoreBadge />
                     </>
                 ) : (
-                    <div style={{display:'flex', alignItems:'center', gap:8}}>
-                      <button className="menu-button" onClick={onMenuClick}>
-                        <span className="menu-icon">☰</span>
-                      </button>
-                      <HeaderAuth />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <button className="menu-button" onClick={onMenuClick}>
+                            <span className="menu-icon">☰</span>
+                        </button>
+                        <HeaderAuth />
                     </div>
                 )}
             </div>
@@ -35,12 +34,29 @@ const Header = ({ activeNaam, isDesktop, onMenuClick }) => {
 };
 
 const HeaderAuth = () => {
-    const { user, isAuthenticated, logout, openLogin } = useAuth();
+    const { user, isAuthenticated, openLogin } = useAuth();
+
+    const handleLogout = () => {
+        // Direct logout - no context needed
+        console.log('Direct logout triggered');
+
+        // Clear all Supabase keys from localStorage
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('sb-')) {
+                localStorage.removeItem(key);
+            }
+        });
+
+        // Force hard reload to root
+        window.location.href = '/';
+    };
+
     if (isAuthenticated) {
+        const userName = user?.user_metadata?.name || user?.email?.split('@')[0] || 'You';
         return (
             <div className="header-user">
-                <span className="user-name">{user?.name || 'You'}</span>
-                <button className="logout-button" onClick={logout}>Logout</button>
+                <span className="user-name">{userName}</span>
+                <button className="logout-button" onClick={handleLogout}>Logout</button>
             </div>
         );
     }

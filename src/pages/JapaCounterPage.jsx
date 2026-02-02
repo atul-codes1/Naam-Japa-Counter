@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'; 
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { getHindiName } from '../utils/helpers';
 import CenteredLayout from '../components/japa/CenteredLayout';

@@ -1,59 +1,123 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../services/supabase';
+import { syncOnLogin } from '../services/syncService';
 import LoginModal from '../components/auth/LoginModal';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(() => localStorage.getItem('jwt_token'));
-  const [user, setUser] = useState(() => {
-    const raw = localStorage.getItem('user');
-    return raw ? JSON.parse(raw) : null;
-  });
+  const [user, setUser] = useState(null);
+  const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [redirectAfterLogin, setRedirectAfterLogin] = useState(null);
+  const [isSyncing, setIsSyncing] = useState(false);
   const navigate = useNavigate();
 
+  // Check for existing session on mount
   useEffect(() => {
-    if (token) localStorage.setItem('jwt_token', token);
-    else localStorage.removeItem('jwt_token');
-  }, [token]);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setSession(session);
+      setLoading(false);
+    });
 
-  useEffect(() => {
-    if (user) localStorage.setItem('user', JSON.stringify(user));
-    else localStorage.removeItem('user');
-  }, [user]);
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      console.log('Auth state changed:', _event, session?.user?.email);
+      setUser(session?.user ?? null);
+      setSession(session);
 
-  const login = (jwtToken, userObj) => {
-    setToken(jwtToken);
-    setUser(userObj);
-    setIsLoginOpen(false);
-    // placeholder: sync local data to backend later
-    const localData = localStorage.getItem('japa_stats');
-    if (localData) console.log('syncLocalDataToBackend', JSON.parse(localData));
+      // If user just logged in (NEW login, not existing session), sync data
+      if (session?.user && _event === 'SIGNED_IN') {
+        setIsSyncing(true);
 
-    // if a redirect path was set, navigate there after login
-    if (redirectAfterLogin) {
-      navigate(redirectAfterLogin, { replace: true });
-      setRedirectAfterLogin(null);
+        // Create/update user profile with error handling
+        console.log('📝 Creating user profile for:', session.user.email);
+        const { data: profileData, error: profileError } = await supabase
+          .from('user_profiles')
+          .upsert({
+            user_id: session.user.id,
+            display_name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Devotee',
+            avatar_url: session.user.user_metadata?.avatar_url || null
+          });
+
+        if (profileError) {
+          console.error('❌ Profile creation failed:', profileError);
+        } else {
+          console.log('✅ Profile created:', profileData);
+        }
+
+        await syncOnLogin(session.user.id);
+        setIsSyncing(false);
+
+        // NO PAGE RELOAD - just navigate
+        if (window.location.hash.includes('access_token')) {
+          window.history.replaceState(null, '', '/');
+          navigate('/', { replace: true });
+        } else if (redirectAfterLogin) {
+          navigate(redirectAfterLogin, { replace: true });
+          setRedirectAfterLogin(null);
+        } else {
+          navigate('/', { replace: true });
+        }
+      }
+
+      // If restoring existing session (page refresh), don't show modal or reload
+      if (session?.user && _event === 'INITIAL_SESSION') {
+        console.log('✅ Existing session restored, no sync needed');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate, redirectAfterLogin]);
+
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/`
+      }
+    });
+
+    if (error) {
+      console.error('Login error:', error);
+      alert('Login failed. Please try again.');
     }
   };
 
-  const logout = () => {
-    setToken(null);
-    setUser(null);
+  const signOut = () => {
+    console.log('🚪 Logout clicked!');
+
+    // Clear Supabase session storage directly
+    localStorage.removeItem('sb-' + window.location.hostname.split('.')[0] + '-auth-token');
+
+    // Force reload to clear all state
+    window.location.replace('/');
   };
 
   const openLogin = (redirectPath = null) => {
     if (redirectPath) setRedirectAfterLogin(redirectPath);
     setIsLoginOpen(true);
   };
+
   const closeLogin = () => setIsLoginOpen(false);
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, openLogin, closeLogin, isAuthenticated: !!token }}>
+    <AuthContext.Provider value={{
+      user,
+      session,
+      loading,
+      signInWithGoogle,
+      signOut,
+      openLogin,
+      closeLogin,
+      isAuthenticated: !!user,
+      isSyncing
+    }}>
       {children}
-      <LoginModal isOpen={isLoginOpen} onClose={closeLogin} onLogin={login} />
+      <LoginModal isOpen={isLoginOpen} onClose={closeLogin} />
     </AuthContext.Provider>
   );
 };

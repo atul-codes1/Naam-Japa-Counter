@@ -6,90 +6,21 @@ import PremanandJiPage from './pages/PremanandJiPage';
 import StatisticsPage from './pages/StatisticsPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import FullCenteredBackground from './components/common/FullCenteredBackground';
-import MobileDrawer from './components/common/MobileDrawer';
-import Header from './components/common/Header';
-import WebFooter from './components/common/WebFooter';
+import FullCenteredBackground from './components/layout/FullCenteredBackground';
+import MobileDrawer from './components/layout/MobileDrawer';
+import Header from './components/layout/Header';
+import WebFooter from './components/layout/WebFooter';
+import useAuth from './hooks/useAuth';
+import { useSync } from './context/SyncContext';
 
 function App() {
+  const { user } = useAuth();
+  const { updateJapaCount, getDeityStats, getAllMergedStats } = useSync();
   const navigate = useNavigate();
   const location = useLocation();
   const [activeNaam, setActiveNaam] = useState('Radha');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  // --- PERSISTENCE & GLOBAL STATE ---
-  const [japaStats, setJapaStats] = useState(() => {
-    const saved = localStorage.getItem('japa_stats');
-    return saved ? JSON.parse(saved) : {};
-  });
-
-  // Save to localStorage whenever stats change
-  useEffect(() => {
-    localStorage.setItem('japa_stats', JSON.stringify(japaStats));
-  }, [japaStats]);
-
-  const getTodayStr = () => new Date().toISOString().split('T')[0];
-
-  const updateJapaCount = (naam) => {
-    const today = getTodayStr();
-
-    setJapaStats(prev => {
-      const stats = { ...prev };
-      if (!stats[naam]) {
-        stats[naam] = {
-          currentCount: 0,
-          lifetime: { totalCounts: 0, totalMalas: 0 },
-          history: {}
-        };
-      }
-
-      const deity = { ...stats[naam] };
-      deity.lifetime = { ...deity.lifetime };
-      deity.history = { ...deity.history };
-
-      // Increment counts
-      deity.currentCount += 1;
-      deity.lifetime.totalCounts += 1;
-
-      // Ensure today's entry exists in history
-      if (!deity.history[today]) {
-        deity.history[today] = { counts: 0, malas: 0 };
-      }
-      deity.history[today].counts += 1;
-
-      // Handle Mala completion
-      if (deity.currentCount > 108) {
-        deity.currentCount = 1;
-        deity.lifetime.totalMalas += 1;
-        deity.history[today].malas += 1;
-      }
-
-      stats[naam] = deity;
-      return stats;
-    });
-  };
-
-  const getDeityStats = (naam) => {
-    const today = getTodayStr();
-    const defaultStats = {
-      currentCount: 0,
-      totalMalas: 0,
-      totalJapa: 0,
-      todaysJapa: 0
-    };
-
-    if (!japaStats[naam]) return defaultStats;
-
-    const deity = japaStats[naam];
-    return {
-      currentCount: deity.currentCount,
-      totalMalas: deity.lifetime.totalMalas,
-      totalJapa: deity.lifetime.totalCounts,
-      todaysJapa: deity.history[today]?.counts || 0
-    };
-  };
-  // ----------------------------------
 
   const isDesktop = windowWidth > 1000;
 
@@ -114,6 +45,9 @@ function App() {
     } else if (path === '/statistics') {
       title = 'Spiritual Insights | Japa Counter Statistics';
       description = 'Analyze your spiritual journey with detailed statistics and insights. View your lifetime malas and daily progress.';
+    } else if (path === '/leaderboard') {
+      title = 'Global Leaderboard | Compete with Devotees';
+      description = 'See where you stand in the global spiritual community. Check daily, monthly, and yearly rankings.';
     }
 
     document.title = title;
@@ -136,7 +70,6 @@ function App() {
     setActiveNaam(naam);
     navigate(`/naam-japa-counter/${naam}`);
   };
-
 
   return (
     <div className="app-container">
@@ -202,7 +135,7 @@ function App() {
               path="/statistics"
               element={
                 <ProtectedRoute>
-                  <StatisticsPage japaStats={japaStats} />
+                  <StatisticsPage japaStats={getAllMergedStats()} />
                 </ProtectedRoute>
               }
             />
