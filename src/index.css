@@ -2471,3 +2471,78 @@
     color: #D81B60;
     font-weight: 600;
   }
+
+  /* --- Modern Drawer Header --- */
+  .drawer-header-modern {
+    background: linear-gradient(135deg, #D81B60 0%, #FF4081 100%);
+    padding: 48px 24px 32px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(216, 27, 96, 0.2);
+  }
+
+  .drawer-header-modern::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .drawer-user-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .drawer-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+  }
+
+  .drawer-user-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .drawer-greeting {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    text-transform: capitalize;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .drawer-username {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    /* Increased from 16px */
+    font-weight: 700;
+    /* Increased from 500 */
+    color: white;
+    /* Pure White */
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle lift */
+  }

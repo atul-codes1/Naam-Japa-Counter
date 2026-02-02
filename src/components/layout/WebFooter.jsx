@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const WebFooter = ({ isDesktop }) => {
     const links = ['About', 'Terms', 'Privacy', 'Refund', 'Contact'];
@@ -23,16 +24,21 @@ const WebFooter = ({ isDesktop }) => {
     );
 };
 
+export default WebFooter;
+
 const FooterLinks = ({ links }) => {
+    // Map link text to route paths
+    const getPath = (text) => {
+        return `/${text.toLowerCase()}`;
+    };
+
     return (
         <div className="footer-links">
             {links.map((link, i) => (
-                <span key={i} className="footer-link" onClick={() => { }}>
+                <Link key={i} to={getPath(link)} className="footer-link">
                     {link}
-                </span>
+                </Link>
             ))}
         </div>
     );
 };
-
-export default WebFooter;

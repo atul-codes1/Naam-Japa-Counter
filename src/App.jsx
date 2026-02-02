@@ -5,6 +5,11 @@ import NaamLibraryPage from './pages/NaamLibraryPage';
 import PremanandJiPage from './pages/PremanandJiPage';
 import StatisticsPage from './pages/StatisticsPage';
 import LeaderboardPage from './pages/LeaderboardPage';
+import AboutPage from './pages/AboutPage';
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
+import RefundPage from './pages/RefundPage';
+import ContactPage from './pages/ContactPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import FullCenteredBackground from './components/layout/FullCenteredBackground';
 import MobileDrawer from './components/layout/MobileDrawer';
@@ -141,8 +146,18 @@ function App() {
             />
             <Route
               path="/leaderboard"
-              element={<LeaderboardPage />}
+              element={
+                <ProtectedRoute>
+                  <LeaderboardPage />
+                </ProtectedRoute>
+              }
             />
+            {/* Footer Pages */}
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/refund" element={<RefundPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Routes>
 
           {!location.pathname.startsWith('/naam-japa-counter/') && (

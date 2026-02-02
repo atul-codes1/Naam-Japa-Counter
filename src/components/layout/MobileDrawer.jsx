@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
     const { user, isAuthenticated, openLogin } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
 
     // Get user display name
     const userName = user?.user_metadata?.name || user?.email?.split('@')[0] || 'Devotee';
@@ -18,6 +19,16 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
             }
         });
         window.location.href = '/';
+    };
+
+    const handleLeaderboardClick = () => {
+        onClose();
+        if (isAuthenticated) {
+            navigate('/leaderboard');
+        } else {
+            console.log("Global Rank clicked -> Guest -> Opening Login");
+            openLogin();
+        }
     };
 
     return (
@@ -35,7 +46,7 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
                             {isAuthenticated ? userInitial : '🕉️'}
                         </div>
                         <div className="drawer-user-text">
-                            <div className="drawer-greeting">Radhe Radhe,</div>
+                            <div className="drawer-greeting">Radhe Radhe</div>
                             <div className="drawer-username">
                                 {isAuthenticated ? userName : 'Guest'}
                             </div>
@@ -52,21 +63,21 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
                         icon="🏠"
                         label="Home"
                         isActive={location.pathname === '/'}
-                        onClose={onClose}
+                        onClick={onClose}
                     />
                     <DrawerLink
                         to="/premanand-ji-maharaj"
                         icon="🙏"
                         label="Premanand Ji"
                         isActive={location.pathname === '/premanand-ji-maharaj'}
-                        onClose={onClose}
+                        onClick={onClose}
                     />
                     <DrawerLink
                         to="/naam-japa-counter"
                         icon="📿"
                         label="Naam Library"
                         isActive={location.pathname.startsWith('/naam-japa-counter')}
-                        onClose={onClose}
+                        onClick={onClose}
                     />
 
                     <div className="drawer-divider-modern" />
@@ -78,14 +89,14 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
                         icon="📈"
                         label="My Journey"
                         isActive={location.pathname === '/statistics'}
-                        onClose={onClose}
+                        onClick={onClose}
                     />
                     <DrawerLink
-                        to="/leaderboard"
+                        // No 'to' means it acts as a button
                         icon="🏆"
                         label="Global Rank"
                         isActive={location.pathname === '/leaderboard'}
-                        onClose={onClose}
+                        onClick={handleLeaderboardClick}
                     />
                 </div>
 
@@ -96,7 +107,11 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
                             <span style={{ marginRight: '8px' }}>🚪</span> Logout
                         </button>
                     ) : (
-                        <button className="drawer-auth-btn login" onClick={() => { onClose(); openLogin(); }}>
+                        <button
+                            className="login-button"
+                            onClick={() => { onClose(); openLogin(); }}
+                            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        >
                             <span style={{ marginRight: '8px' }}>✨</span> Login to Save
                         </button>
                     )}
@@ -106,18 +121,38 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
     );
 };
 
-const DrawerLink = ({ to, icon, label, isActive, onClose }) => (
-    <Link
-        to={to}
-        className={`drawer-link-modern ${isActive ? 'active' : ''}`}
-        onClick={onClose}
-    >
-        <div className="drawer-link-left">
-            <span className="drawer-link-icon">{icon}</span>
-            <span className="drawer-link-label">{label}</span>
+const DrawerLink = ({ to, icon, label, isActive, onClick }) => {
+    // If 'to' is provided, it's a Link
+    if (to) {
+        return (
+            <Link
+                to={to}
+                className={`drawer-link-modern ${isActive ? 'active' : ''}`}
+                onClick={onClick}
+            >
+                <div className="drawer-link-left">
+                    <span className="drawer-link-icon">{icon}</span>
+                    <span className="drawer-link-label">{label}</span>
+                </div>
+                {isActive && <div className="drawer-active-dot" />}
+            </Link>
+        );
+    }
+
+    // Otherwise it's a clickable div (acting as button)
+    return (
+        <div
+            className={`drawer-link-modern ${isActive ? 'active' : ''}`}
+            onClick={onClick}
+            style={{ cursor: 'pointer' }}
+        >
+            <div className="drawer-link-left">
+                <span className="drawer-link-icon">{icon}</span>
+                <span className="drawer-link-label">{label}</span>
+            </div>
+            {isActive && <div className="drawer-active-dot" />}
         </div>
-        {isActive && <div className="drawer-active-dot" />}
-    </Link>
-);
+    );
+};
 
 export default MobileDrawer;

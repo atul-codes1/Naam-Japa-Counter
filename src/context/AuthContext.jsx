@@ -98,12 +98,12 @@ export const AuthProvider = ({ children }) => {
     window.location.replace('/');
   };
 
-  const openLogin = (redirectPath = null) => {
+  const openLogin = React.useCallback((redirectPath = null) => {
     if (redirectPath) setRedirectAfterLogin(redirectPath);
     setIsLoginOpen(true);
-  };
+  }, []);
 
-  const closeLogin = () => setIsLoginOpen(false);
+  const closeLogin = React.useCallback(() => setIsLoginOpen(false), []);
 
   return (
     <AuthContext.Provider value={{

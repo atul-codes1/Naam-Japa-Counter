@@ -67,19 +67,13 @@ const HoverNavButton = ({ label, to }) => {
     const [isHovered, setIsHovered] = useState(false);
     const { isAuthenticated, openLogin } = useAuth();
 
-    const handleClick = (e) => {
-        // protect statistics and leaderboard links by opening the login modal
-        if (!isAuthenticated && (to === '/statistics' || to === '/leaderboard')) {
-            e.preventDefault();
-            openLogin(to);
-        }
-    };
+    // handleClick removed - Navigation handled by Route Protection
 
     return (
         <Link
             to={to}
             className="nav-button"
-            onClick={handleClick}
+            // onClick={handleClick} <-- Removed
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{
