@@ -2,49 +2,6 @@ import React, { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { getLeaderboard } from '../../services/leaderboardService';
 
-// Mock data generator for fallback
-const makeMock = (n, currentUserId, interval) => {
-  const list = [];
-  const baseMultiplier = {
-    daily: 1,
-    monthly: 30,
-    yearly: 365
-  }[interval] || 1;
-
-  for (let i = 1; i <= n; i++) {
-    const counts = Math.max(0, Math.floor((2500 - i * 15) * baseMultiplier * (0.8 + Math.random() * 0.4)));
-    const malas = Math.floor(counts / 108);
-
-    list.push({
-      rank: i,
-      name: `Devotee ${i}`,
-      userId: `user-${i}`,
-      count: counts,
-      malas: malas,
-    });
-  }
-
-  // Insert current user at rank 4 if logged in
-  if (currentUserId) {
-    const userCounts = Math.floor(1800 * baseMultiplier);
-    list.splice(3, 0, {
-      rank: 4,
-      name: 'You',
-      userId: currentUserId,
-      count: userCounts,
-      malas: Math.floor(userCounts / 108),
-      isCurrent: true,
-    });
-
-    // Adjust ranks after insertion
-    list.forEach((item, idx) => {
-      item.rank = idx + 1;
-    });
-  }
-
-  return list.slice(0, 50);
-};
-
 const LeaderboardTable = ({ interval, deity }) => {
   const { user } = useAuth();
   const [data, setData] = useState([]);
@@ -58,17 +15,28 @@ const LeaderboardTable = ({ interval, deity }) => {
       return;
     }
 
-    console.log('📊 Loading leaderboard for', deity, interval);
-    setLoading(true);
+    async function fetchLeaderboard() {
+      setLoading(true);
 
-    // Show mock data immediately
-    setTimeout(() => {
-      const mockData = makeMock(50, user?.id, interval);
-      console.log('✅ Mock data loaded:', mockData.length, 'users');
-      setData(mockData);
-      setLoading(false);
-    }, 500); // Small delay to show it's loading
+      try {
+        // Race against a 10-second timeout
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Request timed out')), 10000)
+        );
 
+        const dataPromise = getLeaderboard(deity, interval);
+        const leaderboardData = await Promise.race([dataPromise, timeoutPromise]);
+
+        setData(leaderboardData || []);
+      } catch (error) {
+        console.error('LeaderboardTable: Error:', error);
+        setData([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchLeaderboard();
   }, [interval, deity, user]);
 
   const getMedalEmoji = (rank) => {
@@ -107,7 +75,8 @@ const LeaderboardTable = ({ interval, deity }) => {
   if (data.length === 0) {
     return (
       <div className="leaderboard-loading">
-        <p>No data available yet. Start chanting to appear on the leaderboard!</p>
+        <p>No devotees found for {deity} Naam {interval === 'daily' ? 'today' : `this ${interval.replace('ly', '')}`}.
+          Be the first to start chanting!</p>
       </div>
     );
   }

@@ -142,13 +142,17 @@ export async function pushPendingIncrements(userId, pendingStats) {
 
                 if (existing) {
                     // 2A. Update (PATCH)
+                    const newTotalCount = existing.count + payload.count;
+                    // FIX: Automatically calculate malas based on the new total count
+                    const newTotalMalas = Math.floor(newTotalCount / 108);
+
                     const updateUrl = `${SUPABASE_URL}/rest/v1/daily_counts?id=eq.${existing.id}`;
                     const updateRes = await fetch(updateUrl, {
                         method: 'PATCH',
                         headers: getHeaders(token),
                         body: JSON.stringify({
-                            count: existing.count + payload.count,
-                            malas: existing.malas + payload.malas,
+                            count: newTotalCount,
+                            malas: newTotalMalas,
                             updated_at: new Date().toISOString()
                         })
                     });
@@ -158,12 +162,19 @@ export async function pushPendingIncrements(userId, pendingStats) {
 
                 } else {
                     // 2B. Insert (POST)
+                    const newTotalCount = payload.count;
+                    const newTotalMalas = Math.floor(newTotalCount / 108);
+
                     const insertUrl = `${SUPABASE_URL}/rest/v1/daily_counts`;
                     const insertRes = await fetch(insertUrl, {
                         method: 'POST',
                         headers: getHeaders(token),
                         body: JSON.stringify({
-                            ...payload,
+                            user_id: userId,
+                            deity_name: deity,
+                            date: date,
+                            count: newTotalCount,
+                            malas: newTotalMalas,
                             updated_at: new Date().toISOString()
                         })
                     });

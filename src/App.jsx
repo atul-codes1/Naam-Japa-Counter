@@ -141,11 +141,7 @@ function App() {
             />
             <Route
               path="/leaderboard"
-              element={
-                <ProtectedRoute>
-                  <LeaderboardPage />
-                </ProtectedRoute>
-              }
+              element={<LeaderboardPage />}
             />
           </Routes>
 
