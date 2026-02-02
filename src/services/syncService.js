@@ -1,7 +1,7 @@
 // import { supabase } from './supabase'; // SDK is broken/hanging, using Fetch API instead.
 
-const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
-const SUPABASE_KEY = process.env.REACT_APP_SUPABASE_ANON_KEY;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 /**
  * Helper: Get Auth Token directly from LocalStorage to avoid SDK hangs.

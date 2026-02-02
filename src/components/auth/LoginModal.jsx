@@ -4,7 +4,7 @@ import '../../index.css';
 import useAuth from '../../hooks/useAuth';
 
 const LoginModal = ({ isOpen, onClose }) => {
-  const { isAuthenticated, signInWithGoogle, isSyncing } = useAuth();
+  const { isAuthenticated, signInWithGoogle, isSyncing, loading } = useAuth();
   const navigate = useNavigate();
 
   const [liveCount, setLiveCount] = React.useState("10,480");
@@ -17,7 +17,8 @@ const LoginModal = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  // Don't show modal if auth is still loading or user is already authenticated
+  if (!isOpen || loading || isAuthenticated) return null;
 
   const handleClose = () => {
     if (onClose) onClose();

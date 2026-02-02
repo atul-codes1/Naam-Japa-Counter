@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
       setSession(session);
 
       // If user just logged in (NEW login, not existing session), sync data
+      // IMPORTANT: Only sync on SIGNED_IN, not INITIAL_SESSION (which fires on page load)
       if (session?.user && _event === 'SIGNED_IN') {
         setIsSyncing(true);
 
