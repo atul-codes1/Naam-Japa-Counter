@@ -2526,35 +2526,6 @@
     gap: 2px;
   }
 
-  /* --- Mobile Layout Optimization (Phase 8) --- */
-  @media (max-width: 768px) {
-
-    /* Global Content */
-    .page-inner,
-    .library-inner,
-    .centered-content {
-      padding: 0 12px !important;
-      max-width: 100% !important;
-      width: 100% !important;
-    }
-
-    /* Cards */
-    .guru-card {
-      padding: 24px 16px !important;
-      width: 100% !important;
-      border-radius: 20px;
-    }
-
-    /* Library Page Specifics */
-    .library-content {
-      padding: 30px 0 !important;
-    }
-
-    .library-grid {
-      gap: 12px !important;
-    }
-  }
-
   .drawer-greeting {
     font-family: 'Outfit', sans-serif;
     font-size: 24px;
