@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import { getHindiName } from '../utils/helpers';
 import CenteredLayout from '../components/japa/CenteredLayout';
 import RandomFloatAnimation from '../components/animation/RandomFloatAnimation';
+import SEO from '../components/common/SEO';
+import SEOContentSection from '../components/layout/SEOContentSection';
+import { deityContent, homeContent } from '../data/seoContent';
 
 const JapaCounter = ({ activeNaam, setActiveNaam, isDesktop, stats, onIncrement }) => {
   const { naam: urlNaam } = useParams();
@@ -79,8 +82,25 @@ const JapaCounter = ({ activeNaam, setActiveNaam, isDesktop, stats, onIncrement 
     setBursts(prev => [...prev, { id: burstId, x, y }]);
   }, [onIncrement]);
 
+  // Determine content source
+  const isHome = !urlNaam;
+  const contentKey = isHome ? 'Home' : (deityContent[activeNaam] ? activeNaam : null);
+  const currentContent = isHome ? homeContent : (deityContent[activeNaam] || {});
+
+  // Prepare SEO Props
+  const seoTitle = currentContent.title || `${activeNaam} Japa Counter`;
+  const seoDesc = currentContent.description || `Track your ${activeNaam} Mantra Chanting online.`;
+  const seoKeywords = currentContent.keywords || [];
+
   return (
     <>
+      <SEO
+        title={seoTitle}
+        description={seoDesc}
+        keywords={seoKeywords}
+        url={window.location.href}
+      />
+
       <div
         className="tap-area"
         onClick={handleTap}
@@ -100,6 +120,9 @@ const JapaCounter = ({ activeNaam, setActiveNaam, isDesktop, stats, onIncrement 
           />
         </div>
       </div>
+
+      {/* Rich Content - Uses Guru Card Style */}
+      <SEOContentSection content={currentContent.content} />
 
       {/* Floating Bursts */}
       {bursts.map(burst => (

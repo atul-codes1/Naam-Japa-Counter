@@ -6,16 +6,16 @@ const OTPInput = ({ value, onChange }) => {
   const handleChange = (e, index) => {
     const input = e.target;
     const val = input.value.replace(/[^0-9]/g, '');
-    
+
     let newValue = (value + val).slice(0, 6);
     if (val === '' && value.length > index) {
       newValue = value.slice(0, index) + value.slice(index + 1);
     } else if (val !== '') {
       newValue = value.slice(0, index) + val + value.slice(index + 1);
     }
-    
+
     onChange(newValue);
-    
+
     if (val !== '' && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }

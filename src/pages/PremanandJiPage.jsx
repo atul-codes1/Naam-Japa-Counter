@@ -1,10 +1,18 @@
 import React from 'react';
+import SEO from '../components/common/SEO';
 import premanandJi from '../assets/images/pujya-shri-premanand-ji-maharaj-japa.jpg';
-
+import { globalKeywords } from '../data/seoContent';
 
 const PremanandJiPage = () => {
     return (
         <div className="page-container">
+            <SEO
+                title="Pujya Shri Premanand Ji Maharaj | Japa Counter"
+                description="Read the teachings of Pujya Shri Premanand Ji Maharaj on Name Jaap, surrender, and Radha Bhakti. Enhance your spiritual journey."
+                keywords={["Premanand Ji Maharaj", "Vrindavan", "Radha Vallabh", "Satsang", "Guru", ...globalKeywords]}
+                image={premanandJi}
+                type="article"
+            />
             <div className="page-content">
                 <div className="page-inner">
                     <h1 className="guru-main-title">🙏 Pujya Shri Premanand Ji Maharaj 🙏</h1>

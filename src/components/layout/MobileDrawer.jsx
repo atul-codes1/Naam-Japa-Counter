@@ -104,15 +104,14 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
                 <div className="drawer-footer">
                     {isAuthenticated ? (
                         <button className="drawer-auth-btn logout" onClick={handleLogout}>
-                            <span style={{ marginRight: '8px' }}>🚪</span> Logout
+                            <span>🚪</span> Logout
                         </button>
                     ) : (
                         <button
-                            className="login-button"
+                            className="drawer-auth-btn login"
                             onClick={() => { onClose(); openLogin(); }}
-                            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         >
-                            <span style={{ marginRight: '8px' }}>✨</span> Login to Save
+                            <span>✨</span> Login to Save
                         </button>
                     )}
                 </div>
@@ -144,7 +143,6 @@ const DrawerLink = ({ to, icon, label, isActive, onClick }) => {
         <div
             className={`drawer-link-modern ${isActive ? 'active' : ''}`}
             onClick={onClick}
-            style={{ cursor: 'pointer' }}
         >
             <div className="drawer-link-left">
                 <span className="drawer-link-icon">{icon}</span>

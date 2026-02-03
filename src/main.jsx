@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App.jsx';
@@ -12,7 +13,9 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <SyncProvider>
-          <App />
+          <HelmetProvider>
+            <App />
+          </HelmetProvider>
         </SyncProvider>
       </AuthProvider>
     </BrowserRouter>

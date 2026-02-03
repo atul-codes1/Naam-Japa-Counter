@@ -1,5 +1,8 @@
 import React from 'react';
 import LibraryCard from '../components/library/LibraryCard';
+import SEO from '../components/common/SEO';
+import SEOContentSection from '../components/layout/SEOContentSection';
+import { libraryContent } from '../data/seoContent';
 
 const NaamLibraryPage = ({ onSelectNaam }) => {
   const deities = [
@@ -12,6 +15,12 @@ const NaamLibraryPage = ({ onSelectNaam }) => {
 
   return (
     <div className="library-container">
+      <SEO
+        title={libraryContent.title}
+        description={libraryContent.description}
+        keywords={libraryContent.keywords}
+      />
+
       <div className="library-content">
         <div className="library-inner">
           <h2 className="library-title">Choose Your Mantra</h2>
@@ -25,6 +34,10 @@ const NaamLibraryPage = ({ onSelectNaam }) => {
                 onSelect={onSelectNaam}
               />
             ))}
+          </div>
+
+          <div style={{ marginTop: '40px' }}>
+            <SEOContentSection content={libraryContent.content} />
           </div>
         </div>
       </div>

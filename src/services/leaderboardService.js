@@ -150,7 +150,7 @@ export async function getUserRank(userId, deity, interval) {
             const params = new URLSearchParams({
                 select: 'user_id,count',
                 deity_name: `eq.${deity}`,
-                // date: `eq.${dateFilter.today}`, // RELAXED
+                date: `eq.${dateFilter.today}`,
                 order: 'count.desc'
             });
 
@@ -170,8 +170,7 @@ export async function getUserRank(userId, deity, interval) {
 
         } else {
             // RELAXED FILTER
-            const queryString = `select=user_id,count&deity_name=eq.${encodeURIComponent(deity)}`;
-            // &date=gte.${dateFilter.start}&date=lte.${dateFilter.end}`;
+            const queryString = `select=user_id,count&deity_name=eq.${encodeURIComponent(deity)}&date=gte.${dateFilter.start}&date=lte.${dateFilter.end}`;
 
             const response = await fetch(`${url}?${queryString}`, { method: 'GET', headers });
             if (!response.ok) throw new Error(`Rank Fetch Error: ${response.status}`);
