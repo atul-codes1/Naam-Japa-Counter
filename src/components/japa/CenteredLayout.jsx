@@ -8,20 +8,29 @@ const CenteredLayout = ({
 }) => {
     return (
         <div className="centered-layout">
-            <h1 className="title-text">
+            <h1
+                className="title-text animate-fade-in-down"
+            >
                 {getHindiName(activeNaam)} नाम जप
             </h1>
 
-            <div className="timer-badge" style={{ marginTop: '15px' }}>
+            <div
+                className="timer-badge timer-badge-container animate-fade-in delay-200"
+            >
                 <span className="timer-icon">⏰</span>
                 <span className="timer-text">{formatTime(secondsElapsed)}</span>
             </div>
 
-            <div style={{ marginTop: '30px' }}>
+            <div
+                className="progress-circle-container animate-zoom-in delay-300"
+            >
                 <ProgressCircle count={currentCount} size={180} showCelebration={showCelebration} />
             </div>
 
-            <div className="stats-container" style={{ marginTop: '30px' }} aria-label="Spiritual Chanting Statistics">
+            <div
+                className="stats-container stats-wrapper animate-slide-up delay-500"
+                aria-label="Spiritual Chanting Statistics"
+            >
                 <AestheticStatCard icon="📿" title="Malas" value={malaCount.toString()} isCompact={true} />
                 <AestheticStatCard icon="🌸" title="Total" value={totalJapa.toString()} isCompact={true} />
                 <AestheticStatCard icon="📅" title="Today" value={todaysJapa.toString()} isCompact={true} />

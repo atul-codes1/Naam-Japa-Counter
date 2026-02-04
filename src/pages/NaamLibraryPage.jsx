@@ -27,16 +27,23 @@ const NaamLibraryPage = ({ onSelectNaam }) => {
 
           <div className="library-grid">
             {deities.map((deity, index) => (
-              <LibraryCard
+              <div
                 key={deity.name}
-                deity={deity}
-                index={index}
-                onSelect={onSelectNaam}
-              />
+                className="animate-fade-in-up"
+                style={{
+                  animationDelay: `${index * 0.1}s`
+                }}
+              >
+                <LibraryCard
+                  deity={deity}
+                  index={index}
+                  onSelect={onSelectNaam}
+                />
+              </div>
             ))}
           </div>
 
-          <div style={{ marginTop: '40px' }}>
+          <div className="library-seo-section">
             <SEOContentSection content={libraryContent.content} />
           </div>
         </div>

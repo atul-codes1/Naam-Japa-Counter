@@ -39,8 +39,8 @@ const LeaderboardPage = () => {
   // Calculate percentage for display
   const getPercentage = () => {
     if (!userRank || !userRank.totalUsers || userRank.totalUsers === 0) return null;
-    const percentage = ((userRank.rank / userRank.totalUsers) * 100).toFixed(1);
-    return percentage;
+    const val = (userRank.rank / userRank.totalUsers) * 100;
+    return Number.isInteger(val) ? val.toString() : val.toFixed(1);
   };
 
   // If not logged in, show login prompt
@@ -48,26 +48,15 @@ const LeaderboardPage = () => {
     return (
       <div className="page-container">
         <div className="page-content">
-          <div className="page-inner" style={{ maxWidth: '600px', textAlign: 'center', paddingTop: '100px' }}>
-            <h1 style={{ fontSize: '48px', marginBottom: '20px' }}>🏆</h1>
-            <h2 style={{ fontSize: '28px', marginBottom: '15px', fontWeight: '700', color: '#1a1a1a' }}>Global Leaderboard</h2>
-            <p style={{ fontSize: '16px', color: '#666', marginBottom: '30px', lineHeight: '1.6' }}>
+          <div className="login-prompt-container">
+            <h1 className="login-prompt-icon">🏆</h1>
+            <h2 className="login-prompt-title">Global Leaderboard</h2>
+            <p className="login-prompt-text">
               Login to compete with devotees worldwide and see your ranking!
             </p>
             <button
               onClick={() => openLogin('/leaderboard')}
-              style={{
-                padding: '15px 40px',
-                fontSize: '18px',
-                fontWeight: '600',
-                backgroundColor: '#4285f4',
-                color: 'white',
-                border: 'none',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(66, 133, 244, 0.3)',
-                transition: 'all 0.3s ease'
-              }}
+              className="login-prompt-btn"
             >
               Login with Google
             </button>
@@ -80,7 +69,7 @@ const LeaderboardPage = () => {
   return (
     <div className="page-container">
       <div className="page-content">
-        <div className="page-inner" style={{ maxWidth: '1100px' }}>
+        <div className="page-inner page-inner-large">
 
           {/* Page Title */}
           <div className="leaderboard-header">
@@ -90,72 +79,57 @@ const LeaderboardPage = () => {
             </p>
           </div>
 
-          {/* User Rank Card - shown when logged in */}
-          {user && (
-            <div className="user-rank-card compact">
-              {loadingRank ? (
-                <div style={{ padding: '20px', textAlign: 'center' }}>
-                  <div className="loading-spinner"></div>
-                  <p style={{ marginTop: '10px', color: '#666' }}>Loading your rank...</p>
-                </div>
-              ) : userRank ? (
-                <>
-                  <div className="rank-circle">
-                    <div className="rank-number">#{userRank.rank}</div>
-                    <div className="rank-label">Your Rank</div>
+          <div className="leaderboard-controls-row">
+            {/* User Rank Card - shown when logged in */}
+            {user && (
+              <div className="user-rank-card compact">
+                {loadingRank ? (
+                  <div className="loading-container">
+                    <div className="loading-spinner"></div>
+                    <p className="loading-text">Loading your rank...</p>
                   </div>
-                  <div className="rank-details">
-                    <div className="rank-stat">
-                      <span className="rank-stat-label">Total Users</span>
-                      <span className="rank-stat-value">{userRank.totalUsers.toLocaleString()}</span>
+                ) : userRank ? (
+                  <>
+                    <div className="rank-circle">
+                      <div className="rank-number">#{userRank.rank}</div>
+                      <div className="rank-label">Your Rank</div>
                     </div>
-                    <div className="rank-stat">
-                      <span className="rank-stat-label">Top</span>
-                      <span className="rank-stat-value">{getPercentage()}%</span>
+                    <div className="rank-details">
+                      <div className="rank-stat">
+                        <span className="rank-stat-label">Total Users</span>
+                        <span className="rank-stat-value">{userRank.totalUsers.toLocaleString()}</span>
+                      </div>
+                      <div className="rank-stat">
+                        <span className="rank-stat-label">Top</span>
+                        <span className="rank-stat-value">{getPercentage()}%</span>
+                      </div>
                     </div>
+                  </>
+                ) : (
+                  <div className="loading-container">
+                    <p className="empty-state-text">
+                      Start chanting {selectedDeity} Naam to appear on the leaderboard!
+                    </p>
                   </div>
-                </>
-              ) : (
-                <div style={{ padding: '20px', textAlign: 'center' }}>
-                  <p style={{ color: '#666', fontSize: '14px' }}>
-                    Start chanting {selectedDeity} Naam to appear on the leaderboard!
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
 
-          {/* Deity Selector */}
-          <div className="deity-selector-wrapper">
-            <label style={{
-              display: 'block',
-              marginBottom: '8px',
-              fontSize: '14px',
-              fontWeight: '600',
-              color: '#666',
-              textAlign: 'center'
-            }}>
-              📿 Select Deity for Rankings:
-            </label>
-            <select
-              value={selectedDeity}
-              onChange={(e) => setSelectedDeity(e.target.value)}
-              className="deity-selector-dropdown"
-              style={{
-                padding: '10px 15px',
-                fontSize: '16px',
-                borderRadius: '8px',
-                border: '2px solid #e0e0e0',
-                backgroundColor: 'white',
-                cursor: 'pointer',
-                minWidth: '200px',
-                fontWeight: '500'
-              }}
-            >
-              {DEITIES.map(deity => (
-                <option key={deity} value={deity}>{deity} Naam</option>
-              ))}
-            </select>
+            {/* Deity Selector */}
+            <div className="deity-selector-wrapper">
+              <label className="deity-selector-label">
+                📿 Select Deity for Rankings:
+              </label>
+              <select
+                value={selectedDeity}
+                onChange={(e) => setSelectedDeity(e.target.value)}
+                className="deity-selector-dropdown"
+              >
+                {DEITIES.map(deity => (
+                  <option key={deity} value={deity}>{deity} Naam</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Tabs */}

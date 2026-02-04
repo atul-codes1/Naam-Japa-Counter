@@ -65,10 +65,10 @@ const StatisticsPage = ({ japaStats }) => {
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
-                <div style={{ background: 'white', padding: '10px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', border: 'none' }}>
-                    <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>{label}</p>
+                <div className="custom-tooltip">
+                    <p className="tooltip-label">{label}</p>
                     {payload.map((entry, index) => (
-                        <p key={index} style={{ color: entry.color, fontSize: '14px' }}>
+                        <p key={index} className="tooltip-item" style={{ color: entry.color }}>
                             {entry.name}: {entry.value} Japa
                         </p>
                     ))}
@@ -82,44 +82,58 @@ const StatisticsPage = ({ japaStats }) => {
         <div className="page-container">
             <div className="page-content">
                 <div className="page-inner">
-                    <h1 className="guru-main-title">Spiritual Insights</h1>
+                    <h1
+                        className="guru-main-title animate-fade-in-down"
+                    >
+                        Spiritual Insights
+                    </h1>
 
-                    {/* Key Stats Cards - Using the updated .stat-card class from index.css */}
-                    <div className="stats-container" style={{ marginBottom: '40px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
-                        <div className="stat-card" style={{ width: '180px' }}>
-                            <span style={{ fontSize: '24px', marginBottom: '4px' }}>🔥</span>
-                            <span style={{ fontSize: '14px', color: '#666' }}>Active Days</span>
-                            <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#880E4F' }}>
+                    {/* Key Stats Cards */}
+                    <div className="stats-container stats-page-grid">
+                        <div
+                            className="stat-card stats-page-card animate-fade-in-up delay-200"
+                        >
+                            <span className="stat-card-icon">🔥</span>
+                            <span className="stat-card-label">Active Days</span>
+                            <span className="stat-card-value">
                                 {advancedStats.activeDays}
                             </span>
                         </div>
-                        <div className="stat-card" style={{ width: '180px' }}>
-                            <span style={{ fontSize: '24px', marginBottom: '4px' }}>✨</span>
-                            <span style={{ fontSize: '14px', color: '#666' }}>Total Japa</span>
-                            <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#880E4F' }}>
+                        <div
+                            className="stat-card stats-page-card animate-fade-in-up delay-300"
+                        >
+                            <span className="stat-card-icon">✨</span>
+                            <span className="stat-card-label">Total Japa</span>
+                            <span className="stat-card-value">
                                 {advancedStats.totalJapa}
                             </span>
                         </div>
-                        <div className="stat-card" style={{ width: '180px' }}>
-                            <span style={{ fontSize: '24px', marginBottom: '4px' }}>🏆</span>
-                            <span style={{ fontSize: '14px', color: '#666' }}>Best Day</span>
-                            <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#C2185B' }}>
+                        <div
+                            className="stat-card stats-page-card animate-fade-in-up delay-400"
+                        >
+                            <span className="stat-card-icon">🏆</span>
+                            <span className="stat-card-label">Best Day</span>
+                            <span className="stat-card-value highlight">
                                 {advancedStats.bestDay}
                             </span>
                         </div>
-                        <div className="stat-card" style={{ width: '180px' }}>
-                            <span style={{ fontSize: '24px', marginBottom: '4px' }}>📊</span>
-                            <span style={{ fontSize: '14px', color: '#666' }}>Average/Day</span>
-                            <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#C2185B' }}>
+                        <div
+                            className="stat-card stats-page-card animate-fade-in-up delay-500"
+                        >
+                            <span className="stat-card-icon">📊</span>
+                            <span className="stat-card-label">Average/Day</span>
+                            <span className="stat-card-value highlight">
                                 {advancedStats.averageDay}
                             </span>
                         </div>
                     </div>
 
                     {/* Weekly Progress Chart */}
-                    <div className="guru-card" style={{ padding: '30px', marginBottom: '30px' }}>
-                        <h2 className="guru-title" style={{ fontSize: '22px', textAlign: 'center', marginBottom: '25px' }}>Progress Chart</h2>
-                        <div style={{ width: '100%', height: 350 }}>
+                    <div
+                        className="guru-card chart-card animate-slide-up delay-500"
+                    >
+                        <h2 className="guru-title chart-title">Progress Chart</h2>
+                        <div className="chart-container-large">
                             <ResponsiveContainer>
                                 <BarChart data={chartData}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
@@ -142,11 +156,14 @@ const StatisticsPage = ({ japaStats }) => {
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '30px', flexWrap: 'wrap' }}>
+                    <div className="stats-row">
                         {/* Distribution Pie Chart */}
-                        <div className="guru-card" style={{ padding: '30px', flex: '1', minWidth: '300px' }}>
-                            <h2 className="guru-title" style={{ fontSize: '18px', textAlign: 'center', marginBottom: '20px' }}>Naam Connection</h2>
-                            <div style={{ width: '100%', height: 250 }}>
+                        {/* Distribution Pie Chart */}
+                        <div
+                            className="guru-card pie-chart-card animate-slide-up delay-600"
+                        >
+                            <h2 className="guru-title chart-title pie-chart-title">Naam Connection</h2>
+                            <div className="chart-container-medium">
                                 <ResponsiveContainer>
                                     <PieChart>
                                         <Pie
@@ -170,9 +187,9 @@ const StatisticsPage = ({ japaStats }) => {
                         </div>
 
                         {/* Quote / Message */}
-                        <div className="guru-card" style={{ padding: '30px', flex: '1', minWidth: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-                            <span style={{ fontSize: '40px', marginBottom: '15px' }}>📿</span>
-                            <p style={{ fontStyle: 'italic', color: '#666', fontSize: '18px', lineHeight: '1.6' }}>
+                        <div className="guru-card quote-card">
+                            <span className="quote-icon">📿</span>
+                            <p className="quote-text">
                                 "Constant chanting is the only way to reach the ultimate peace. Every single name you utter is stored in the reservoir of your heart."
                             </p>
                         </div>

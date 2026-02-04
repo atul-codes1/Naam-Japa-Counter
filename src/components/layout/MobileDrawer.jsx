@@ -94,7 +94,7 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
                     <DrawerLink
                         // No 'to' means it acts as a button
                         icon="🏆"
-                        label="Global Rank"
+                        label="My Rank"
                         isActive={location.pathname === '/leaderboard'}
                         onClick={handleLeaderboardClick}
                     />

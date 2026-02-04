@@ -15,15 +15,17 @@ const PremanandJiPage = () => {
             />
             <div className="page-content">
                 <div className="page-inner">
-                    <h1 className="guru-main-title">🙏 Pujya Shri Premanand Ji Maharaj 🙏</h1>
-                    <div className="guru-image-container">
+                    <h1 className="guru-main-title animate-fade-in-down">
+                        🙏 Pujya Shri Premanand Ji Maharaj 🙏
+                    </h1>
+                    <div className="guru-image-container animate-fade-in delay-300">
                         <img
                             src={premanandJi}
                             alt="Pujya Shri Premanand Ji Maharaj chanting Radha Naam in Vrindavan"
                             className="guru-image"
                         />
                     </div>
-                    <div className="guru-card">
+                    <div className="guru-card animate-slide-up delay-400">
 
                         <div className="guru-text-content">
                             <h2 className="guru-title">Radha Vallabh Shri Harivansh</h2>

@@ -161,7 +161,11 @@ export const SyncProvider = ({ children }) => {
     /**
      * FULL MERGE: For Statistics Page
      */
-    const getAllMergedStats = () => {
+    /**
+     * FULL MERGE: For Statistics Page
+     * Memoized to prevent App-wide re-renders
+     */
+    const allMergedStats = React.useMemo(() => {
         const merged = JSON.parse(JSON.stringify(cachedServerState));
 
         Object.entries(pendingIncrements).forEach(([naam, dates]) => {
@@ -182,7 +186,7 @@ export const SyncProvider = ({ children }) => {
         });
 
         return merged;
-    };
+    }, [cachedServerState, pendingIncrements]);
 
     return (
         <SyncContext.Provider value={{
@@ -190,7 +194,7 @@ export const SyncProvider = ({ children }) => {
             pendingIncrements,
             updateJapaCount,
             getDeityStats,
-            getAllMergedStats
+            allMergedStats
         }}>
             {children}
         </SyncContext.Provider>

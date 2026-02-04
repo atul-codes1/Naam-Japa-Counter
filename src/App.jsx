@@ -1,15 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import JapaCounterPage from './pages/JapaCounterPage';
-import NaamLibraryPage from './pages/NaamLibraryPage';
-import PremanandJiPage from './pages/PremanandJiPage';
-import StatisticsPage from './pages/StatisticsPage';
-import LeaderboardPage from './pages/LeaderboardPage';
-import AboutPage from './pages/AboutPage';
-import TermsPage from './pages/TermsPage';
-import PrivacyPage from './pages/PrivacyPage';
-import RefundPage from './pages/RefundPage';
-import ContactPage from './pages/ContactPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import FullCenteredBackground from './components/layout/FullCenteredBackground';
 import MobileDrawer from './components/layout/MobileDrawer';
@@ -18,9 +8,28 @@ import WebFooter from './components/layout/WebFooter';
 import useAuth from './hooks/useAuth';
 import { useSync } from './context/SyncContext';
 
+// Lazy Load Pages for Performance
+const JapaCounterPage = lazy(() => import('./pages/JapaCounterPage'));
+const NaamLibraryPage = lazy(() => import('./pages/NaamLibraryPage'));
+const PremanandJiPage = lazy(() => import('./pages/PremanandJiPage'));
+const StatisticsPage = lazy(() => import('./pages/StatisticsPage'));
+const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
+const RefundPage = lazy(() => import('./pages/RefundPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+
+// Loading Fallback
+const PageLoader = () => (
+  <div className="app-loader">
+    <div className="loader-spinner"></div>
+  </div>
+);
+
 function App() {
   const { user } = useAuth();
-  const { updateJapaCount, getDeityStats, getAllMergedStats } = useSync();
+  const { updateJapaCount, getDeityStats, allMergedStats } = useSync();
   const navigate = useNavigate();
   const location = useLocation();
   const [activeNaam, setActiveNaam] = useState('Radha');
@@ -29,38 +38,14 @@ function App() {
 
   const isDesktop = windowWidth > 1000;
 
-  // Handle Dynamic Document Titles & Meta Descriptions
+  // Handle URL-based Active Naam setting (moved from manual title logic to simple state sync)
   useEffect(() => {
     const path = location.pathname;
-    let title = 'Japa Counter - Spiritual Mantra Chanting';
-    let description = 'The most beautiful and simple Japa Counter for spiritual practitioners. Track your Naam Jaap of Radha, Krishna, Ram, and more.';
-
     if (path === '/') {
-      title = 'Japa Counter - Spiritual Mantra Chanting';
-      description = 'Start your spiritual journey with the best Japa Counter. Track your daily counts and spiritual progress with ease.';
       setActiveNaam('Radha');
-    } else if (path.startsWith('/naam-japa-counter')) {
-      const naamParam = path.split('/')[2];
-      const displayName = naamParam || 'Mantra';
-      title = `${displayName} Japa | Naam Library`;
-      description = `Practice ${displayName} Japa with our aesthetic counter. Part of the ultimate Naam Library for spiritual chanting.`;
-    } else if (path === '/premanand-ji-maharaj') {
-      title = 'Pujya Shri Premanand Ji Maharaj | Japa Counter';
-      description = 'Connecting you to the teachings of Pujya Shri Premanand Ji Maharaj and supporting your daily Naam Jaap practice.';
-    } else if (path === '/statistics') {
-      title = 'Spiritual Insights | Japa Counter Statistics';
-      description = 'Analyze your spiritual journey with detailed statistics and insights. View your lifetime malas and daily progress.';
-    } else if (path === '/leaderboard') {
-      title = 'Global Leaderboard | Compete with Devotees';
-      description = 'See where you stand in the global spiritual community. Check daily, monthly, and yearly rankings.';
     }
 
-    document.title = title;
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', description);
-    }
-
+    // Scroll to top on route change
     window.scrollTo(0, 0);
   }, [location]);
 
@@ -100,65 +85,67 @@ function App() {
       {/* Main Content */}
       <div className="main-content">
         <div className="scroll-container" key={location.pathname}>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <JapaCounterPage
-                  activeNaam={activeNaam}
-                  isDesktop={isDesktop}
-                  stats={getDeityStats(activeNaam)}
-                  onIncrement={() => updateJapaCount(activeNaam)}
-                />
-              }
-            />
-            <Route
-              path="/naam-japa-counter"
-              element={
-                <NaamLibraryPage
-                  onSelectNaam={handleSelectNaam}
-                />
-              }
-            />
-            <Route
-              path="/naam-japa-counter/:naam"
-              element={
-                <JapaCounterPage
-                  activeNaam={activeNaam}
-                  setActiveNaam={setActiveNaam}
-                  isDesktop={isDesktop}
-                  stats={getDeityStats(activeNaam)}
-                  onIncrement={() => updateJapaCount(activeNaam)}
-                />
-              }
-            />
-            <Route
-              path="/premanand-ji-maharaj"
-              element={<PremanandJiPage />}
-            />
-            <Route
-              path="/statistics"
-              element={
-                <ProtectedRoute>
-                  <StatisticsPage japaStats={getAllMergedStats()} />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/leaderboard"
-              element={
-                <ProtectedRoute>
-                  <LeaderboardPage />
-                </ProtectedRoute>
-              }
-            />
-            {/* Footer Pages */}
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/terms" element={<TermsPage />} />
-            <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/refund" element={<RefundPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <JapaCounterPage
+                    activeNaam={activeNaam}
+                    isDesktop={isDesktop}
+                    stats={getDeityStats(activeNaam)}
+                    onIncrement={() => updateJapaCount(activeNaam)}
+                  />
+                }
+              />
+              <Route
+                path="/naam-japa-counter"
+                element={
+                  <NaamLibraryPage
+                    onSelectNaam={handleSelectNaam}
+                  />
+                }
+              />
+              <Route
+                path="/naam-japa-counter/:naam"
+                element={
+                  <JapaCounterPage
+                    activeNaam={activeNaam}
+                    setActiveNaam={setActiveNaam}
+                    isDesktop={isDesktop}
+                    stats={getDeityStats(activeNaam)}
+                    onIncrement={() => updateJapaCount(activeNaam)}
+                  />
+                }
+              />
+              <Route
+                path="/premanand-ji-maharaj"
+                element={<PremanandJiPage />}
+              />
+              <Route
+                path="/statistics"
+                element={
+                  <ProtectedRoute>
+                    <StatisticsPage japaStats={allMergedStats} />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <LeaderboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Footer Pages */}
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/refund" element={<RefundPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+            </Routes>
+          </Suspense>
 
           {!location.pathname.startsWith('/naam-japa-counter/') && (
             <WebFooter isDesktop={windowWidth > 900} />

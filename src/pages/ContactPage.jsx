@@ -1,33 +1,40 @@
 import React from 'react';
+import SEO from '../components/common/SEO';
 
 const ContactPage = () => {
     return (
         <div className="page-container">
             <div className="page-content">
                 <div className="page-inner">
+                    <SEO
+                        title="Contact Us | Naam Jaap Counter"
+                        description="Get in touch with the Japa Counter team for feedback, feature requests, or support."
+                    />
                     <h1 className="guru-main-title">Contact Us</h1>
 
-                    <div className="guru-card" style={{ padding: '60px 40px', maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
-                        <div style={{ fontSize: '48px', marginBottom: '20px' }}>📬</div>
+                    <div
+                        className="guru-card static-page-card center-content contact-card-width animate-slide-up"
+                    >
+                        <div className="contact-emoji">📬</div>
 
-                        <h2 style={{ fontSize: '24px', color: '#880E4F', marginBottom: '20px' }}>
+                        <h2 className="static-page-section-title">
                             We'd Love to Hear From You
                         </h2>
 
-                        <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#444', marginBottom: '40px' }}>
+                        <p className="static-page-text mb-40">
                             Whether you have a feature request, found a bug, or just want to share your spiritual journey with us, we are always listening.
                         </p>
 
-                        <div style={{ background: '#F8BBD0', padding: '20px', borderRadius: '12px', display: 'inline-block' }}>
-                            <p style={{ margin: 0, fontSize: '14px', color: '#880E4F', fontWeight: 'bold' }}>
+                        <div className="contact-email-box">
+                            <p className="contact-email-label">
                                 EMAIL US AT
                             </p>
-                            <p style={{ margin: '5px 0 0 0', fontSize: '20px', color: '#D81B60', fontWeight: '600' }}>
+                            <p className="contact-email-address">
                                 hello@japacounter.com
                             </p>
                         </div>
 
-                        <p style={{ marginTop: '30px', fontSize: '14px', color: '#888' }}>
+                        <p className="static-page-text small-mute mt-30">
                             We usually respond within 24-48 hours.
                         </p>
                     </div>

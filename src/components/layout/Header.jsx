@@ -15,13 +15,13 @@ const Header = ({ activeNaam, isDesktop, onMenuClick }) => {
                         <HoverNavButton label="Premanand Ji" to="/premanand-ji-maharaj" />
                         <HoverNavButton label="Naam Library" to="/naam-japa-counter" />
                         <HoverNavButton label="My Journey" to="/statistics" />
-                        <HoverNavButton label="Global Rank" to="/leaderboard" />
-                        <div style={{ width: '18px' }} />
+                        <HoverNavButton label="My Rank" to="/leaderboard" />
+                        <div className="header-auth-spacer" />
                         <HeaderAuth />
-                        <div style={{ width: '18px' }} />
+                        <div className="header-auth-spacer" />
                     </>
                 ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div className="header-mobile-menu-container">
                         <button className="menu-button" onClick={onMenuClick}>
                             <span className="menu-icon">☰</span>
                         </button>
@@ -64,25 +64,10 @@ const HeaderAuth = () => {
 }
 
 const HoverNavButton = ({ label, to }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const { isAuthenticated, openLogin } = useAuth();
-
-    // handleClick removed - Navigation handled by Route Protection
-
     return (
         <Link
             to={to}
-            className="nav-button"
-            // onClick={handleClick} <-- Removed
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            style={{
-                borderColor: isHovered ? '#FF80AB' : 'transparent',
-                color: isHovered ? '#FF80AB' : 'white',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center'
-            }}
+            className="nav-button nav-button-link"
         >
             {label}
         </Link>

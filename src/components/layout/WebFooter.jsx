@@ -7,15 +7,15 @@ const WebFooter = ({ isDesktop }) => {
     return (
         <div className="footer">
             {isDesktop ? (
-                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                <div className="footer-desktop-container">
                     <FooterLinks links={links} />
                     <div className="footer-copyright">© 2026 Radha Naam Jap Counter</div>
                 </div>
             ) : (
-                <div style={{ textAlign: 'center' }}>
+                <div className="footer-mobile-container">
                     <FooterLinks links={links} />
-                    <div style={{ height: '15px' }} />
-                    <div className="footer-copyright" style={{ fontSize: '11px' }}>
+                    <div className="footer-mobile-spacer" />
+                    <div className="footer-copyright mobile-small">
                         © 2026 Radha Naam Jap Counter
                     </div>
                 </div>

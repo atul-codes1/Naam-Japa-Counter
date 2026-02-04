@@ -77,8 +77,7 @@ const ProgressCircle = ({ count, size, showCelebration }) => {
             <div
                 className="progress-text-premium"
                 style={{
-                    transform: `scale(${scale})`,
-                    transition: 'transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                    transform: `scale(${scale})`
                 }}
             >
                 <span className="main-number" style={{ fontSize: size * 0.32 }}>

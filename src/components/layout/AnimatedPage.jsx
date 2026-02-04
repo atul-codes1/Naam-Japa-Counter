@@ -31,7 +31,8 @@ const AnimatedPage = ({ children }) => {
             initial="initial"
             animate="enter"
             exit="exit"
-            style={{ width: '100%' }}
+
+            className="w-full"
         >
             {children}
         </motion.div>

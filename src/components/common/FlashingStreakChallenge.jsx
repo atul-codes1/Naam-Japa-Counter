@@ -17,8 +17,8 @@ const FlashingStreakChallenge = () => {
 
     return (
         <div className="streak-challenge" style={{ opacity }}>
-            <span style={{ fontSize: '16px' }}>🔥</span>
-            <span style={{ marginLeft: '6px' }}>Streak Challenge</span>
+            <span className="streak-fire-icon">🔥</span>
+            <span className="streak-text">Streak Challenge</span>
         </div>
     );
 };
