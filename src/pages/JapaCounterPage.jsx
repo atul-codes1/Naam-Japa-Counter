@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { getHindiName } from '../utils/helpers';
-import CenteredLayout from '../components/japa/CenteredLayout';
-import RandomFloatAnimation from '../components/animation/RandomFloatAnimation';
-import SEO from '../components/common/SEO';
-import SEOContentSection from '../components/layout/SEOContentSection';
-import { deityContent, homeContent } from '../data/seoContent';
+import { getHindiName } from '@/utils/helpers';
+import CenteredLayout from '@/components/japa/CenteredLayout';
+import RandomFloatAnimation from '@/components/animation/RandomFloatAnimation';
+import SEO from '@/components/common/SEO';
+import SEOContentSection from '@/components/layout/SEOContentSection';
+import { deityContent, homeContent } from '@/data/seoContent';
 
 const JapaCounter = ({ activeNaam, setActiveNaam, isDesktop, stats, onIncrement }) => {
   const { naam: urlNaam } = useParams();

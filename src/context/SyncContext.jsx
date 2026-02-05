@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import useAuth from '../hooks/useAuth';
-import { pushPendingIncrements, fetchServerState } from '../services/syncService';
+import useAuth from '@/hooks/useAuth';
+import { pushPendingIncrements, fetchServerState } from '@/services/syncService';
 
 const SyncContext = createContext();
 

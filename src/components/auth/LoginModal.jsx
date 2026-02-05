@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../index.css';
-import useAuth from '../../hooks/useAuth';
+import '@/index.css';
+import useAuth from '@/hooks/useAuth';
 
 const LoginModal = ({ isOpen, onClose }) => {
   const { isAuthenticated, signInWithGoogle, isSyncing, loading } = useAuth();

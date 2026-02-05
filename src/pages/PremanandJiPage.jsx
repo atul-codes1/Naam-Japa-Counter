@@ -1,7 +1,7 @@
 import React from 'react';
-import SEO from '../components/common/SEO';
-import premanandJi from '../assets/images/pujya-shri-premanand-ji-maharaj-japa.jpg';
-import { globalKeywords } from '../data/seoContent';
+import SEO from '@/components/common/SEO';
+import premanandJi from '@/assets/images/pujya-shri-premanand-ji-maharaj-japa.jpg';
+import { globalKeywords } from '@/data/seoContent';
 
 const PremanandJiPage = () => {
     return (

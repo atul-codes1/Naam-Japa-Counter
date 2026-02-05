@@ -3,7 +3,7 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
     PieChart, Pie, Cell
 } from 'recharts';
-import { getHindiName } from '../utils/helpers';
+import { getHindiName } from '@/utils/helpers';
 
 const StatisticsPage = ({ japaStats }) => {
     // 1. Process data for the Weekly Stacked Bar Chart

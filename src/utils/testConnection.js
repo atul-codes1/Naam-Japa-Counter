@@ -1,5 +1,5 @@
 // Quick test file to check Supabase connection
-import { supabase } from './services/supabase';
+import { supabase } from '@/services/supabase';
 
 async function testConnection() {
     console.log('🧪 Testing Supabase connection...');

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import LeaderboardTable from '../components/leaderboard/LeaderboardTable';
-import useAuth from '../hooks/useAuth';
-import { getLeaderboard, getUserRank } from '../services/leaderboardService';
+import LeaderboardTable from '@/components/leaderboard/LeaderboardTable';
+import useAuth from '@/hooks/useAuth';
+import { getLeaderboard, getUserRank } from '@/services/leaderboardService';
 
 const DEITIES = ['Radha', 'Krishna', 'Ram', 'Shiv', 'Narayan'];
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import LibraryCard from '../components/library/LibraryCard';
-import SEO from '../components/common/SEO';
-import SEOContentSection from '../components/layout/SEOContentSection';
-import { libraryContent } from '../data/seoContent';
+import LibraryCard from '@/components/library/LibraryCard';
+import SEO from '@/components/common/SEO';
+import SEOContentSection from '@/components/layout/SEOContentSection';
+import { libraryContent } from '@/data/seoContent';
 
 const NaamLibraryPage = ({ onSelectNaam }) => {
   const deities = [
