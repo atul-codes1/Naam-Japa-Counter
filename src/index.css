@@ -202,21 +202,31 @@
   .timer-badge {
     display: inline-flex;
     align-items: center;
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.5);
-    border: 2px solid white;
-    border-radius: 30px;
+    padding: 4px 10px;
+    /* Reduced from 6px 14px */
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    /* Thinner border */
+    border-radius: 20px;
+    transform: scale(0.8);
+    /* Further reduction from 0.9 */
   }
 
   .timer-icon {
-    font-size: 18px;
-    margin-right: 8px;
+    font-size: 12px;
+    /* Reduced from 16px */
+    margin-right: 4px;
+    opacity: 0.7;
   }
 
   .timer-text {
-    font-size: 18px;
-    font-weight: bold;
-    color: rgba(0, 0, 0, 0.87);
+    font-size: 13px;
+    /* Reduced from 16px */
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.7);
+    /* Slightly softer black */
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: 0.5px;
   }
 
   .progress-circle {
@@ -236,12 +246,20 @@
   .stats-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 16px;
     justify-content: center;
+    width: 100%;
+    max-width: 600px;
+    /* Prevent stretching too wide on desktop */
   }
 
   .stat-card {
-    width: 160px;
+    flex: 1;
+    /* Allow growing */
+    min-width: 100px;
+    /* Minimum width before shrinking too much */
+    max-width: 160px;
+    /* Original size */
     padding: 18px;
     background: white;
     border-radius: 16px;
@@ -252,6 +270,39 @@
     gap: 4px;
     transition: all 0.2s;
     cursor: default;
+  }
+
+  /* --- Mobile Optimization: Compact Stats Bar --- */
+  @media (max-width: 480px) {
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      /* 3 Equal Columns */
+      gap: 8px;
+      /* Tighter gap */
+      padding: 0 10px;
+      /* Side padding to prevent edge touching */
+    }
+
+    .stat-card {
+      min-width: 0;
+      /* Allow shrinking below min-width */
+      padding: 12px 4px;
+      /* drastically reduced padding */
+      border-radius: 12px;
+    }
+
+    /* Target inner text for mobile scaling */
+    .stat-card h3 {
+      font-size: 11px !important;
+      /* Smaller labels */
+      white-space: nowrap;
+    }
+
+    .stat-card span {
+      font-size: 16px !important;
+      /* Smaller values */
+    }
   }
 
   .streak-challenge {
@@ -2094,8 +2145,8 @@
 
   .drawer-content {
     flex: 1;
-    padding: 30px 20px;
-    /* Increased padding */
+    padding: 15px 15px;
+    /* Reduced padding */
     overflow-y: auto;
   }
 
@@ -2105,18 +2156,18 @@
     color: #bbb;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     padding-left: 14px;
-    margin-top: 10px;
+    margin-top: 5px;
   }
 
   .drawer-link-modern {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 18px;
-    margin-bottom: 8px;
-    border-radius: 16px;
+    padding: 10px 14px;
+    margin-bottom: 4px;
+    border-radius: 12px;
     /* Softer corners */
     text-decoration: none;
     color: #555;
@@ -2185,7 +2236,7 @@
   .drawer-divider-modern {
     height: 1px;
     background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.05), transparent);
-    margin: 24px 0;
+    margin: 12px 0;
   }
 
   .drawer-footer {
@@ -2219,10 +2270,34 @@
   }
 
   .drawer-auth-btn.login {
-    background: #111;
+    background: linear-gradient(135deg, #FF4081 0%, #F50057 100%);
     color: white;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 25px -5px rgba(233, 30, 99, 0.4);
     border: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .drawer-auth-btn.login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: 0.5s;
+  }
+
+  .drawer-auth-btn.login:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 15px 35px -5px rgba(233, 30, 99, 0.5), 0 0 0 2px rgba(255, 64, 129, 0.3);
+    background: linear-gradient(135deg, #C2185B 0%, #F50057 100%);
+  }
+
+  .drawer-auth-btn.login:hover::before {
+    left: 100%;
   }
 
   .drawer-auth-btn.logout {
@@ -2478,7 +2553,7 @@
   /* --- Modern Drawer Header --- */
   .drawer-header-modern {
     background: linear-gradient(135deg, #D81B60 0%, #FF4081 100%);
-    padding: 48px 24px 32px;
+    padding: 24px 24px 20px;
     color: white;
     position: relative;
     overflow: hidden;
@@ -3121,51 +3196,128 @@
   .rank-label {
     font-size: 9px !important;
   }
-/* --- Global Animation Helpers --- */
-.animate-enter {
-  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
 
-.animate-enter-delay-1 {
-  animation-delay: 0.1s;
-  animation-fill-mode: backwards;
-}
+  /* --- Global Animation Helpers --- */
+  .animate-enter {
+    animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 
-.animate-enter-delay-2 {
-  animation-delay: 0.2s;
-  animation-fill-mode: backwards;
-}
+  .animate-enter-delay-1 {
+    animation-delay: 0.1s;
+    animation-fill-mode: backwards;
+  }
+
+  .animate-enter-delay-2 {
+    animation-delay: 0.2s;
+    animation-fill-mode: backwards;
+  }
 
 
-/* --- Animation Utilities --- */
+  /* --- Animation Utilities --- */
 
-/* Base Animations */
-.animate-fade-in {
-  animation: fadeIn 0.8s ease-out backwards;
-}
+  /* Base Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out backwards;
+  }
 
-.animate-fade-in-down {
-  animation: fadeInDown 0.8s ease-out backwards;
-}
+  .animate-fade-in-down {
+    animation: fadeInDown 0.8s ease-out backwards;
+  }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out backwards;
-}
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out backwards;
+  }
 
-.animate-slide-up {
-  animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-  animation-fill-mode: backwards;
-}
+  .animate-slide-up {
+    animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    animation-fill-mode: backwards;
+  }
 
-.animate-zoom-in {
-  animation: zoomIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-}
+  .animate-zoom-in {
+    animation: zoomIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  }
 
-/* Delays */
-.delay-100 { animation-delay: 0.1s; }
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
-.delay-400 { animation-delay: 0.4s; }
-.delay-500 { animation-delay: 0.5s; }
-.delay-600 { animation-delay: 0.6s; }
+  /* Delays */
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
 
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  .delay-600 {
+    animation-delay: 0.6s;
+  }
+
+
+  /* --- Modern Stats Button (V2) --- */
+  .view-stats-btn {
+    margin-top: 8px;
+    /* Reduced from 16px */
+    margin-bottom: 4px;
+    /* Reduced from 8px */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 16px;
+    /* Slightly smaller padding */
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    color: black;
+    /* Changed to black */
+    z-index: 10;
+  }
+
+  .view-stats-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .view-stats-btn:active {
+    transform: scale(0.95);
+  }
+
+  .stats-icon {
+    font-size: 1rem;
+    /* Removed drop-shadow for black text */
+  }
+
+  .stats-label {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    /* Removed text-shadow for black text */
+  }
+
+  /* --- Integrated Timer (Inside Circle) --- */
+  .progress-timer-mini {
+    font-size: 13px;
+    color: #888;
+    font-family: 'Outfit', sans-serif;
+    margin-top: 4px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }

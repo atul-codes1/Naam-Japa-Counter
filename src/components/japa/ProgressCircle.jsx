@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import BubbleBurst from '../animation/BubbleBurst';
 import CelebrationStars from '../animation/CelebrationStars';
 
-const ProgressCircle = ({ count, size, showCelebration }) => {
+const ProgressCircle = ({ count, size, showCelebration, secondsElapsed, formatTime }) => {
     const progress = (count % 109) / 108;
     const [scale, setScale] = useState(1);
     const [bubbles, setBubbles] = useState([]);
@@ -83,8 +83,11 @@ const ProgressCircle = ({ count, size, showCelebration }) => {
                 <span className="main-number" style={{ fontSize: size * 0.32 }}>
                     {count}
                 </span>
-                <span className="goal-number" style={{ fontSize: size * 0.06 }}>
+                <span className="goal-number" style={{ fontSize: size * 0.12, marginTop: '5px', opacity: 0.6 }}>
                     / 108
+                </span>
+                <span className="progress-timer-mini">
+                    {formatTime ? formatTime(secondsElapsed) : '00:00'}
                 </span>
             </div>
 
