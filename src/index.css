@@ -2151,14 +2151,14 @@
   }
 
   .drawer-section-title {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     color: #bbb;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 8px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
     padding-left: 14px;
-    margin-top: 5px;
+    margin-top: 15px;
   }
 
   .drawer-link-modern {
@@ -3320,4 +3320,18 @@
     margin-top: 4px;
     font-weight: 500;
     letter-spacing: 0.5px;
+  }
+
+  /* --- Mobile Fix: Reduce Header Gap --- */
+  @media (max-width: 768px) {
+    .centered-content {
+      justify-content: flex-start;
+      padding-top: 10px;
+      min-height: calc(100vh - 90px);
+    }
+
+    .title-text {
+      margin-top: 10px;
+      font-size: 42px;
+    }
   }
