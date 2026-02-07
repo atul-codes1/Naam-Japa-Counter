@@ -8,6 +8,19 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
     const location = useLocation();
     const navigate = useNavigate();
 
+    // Lock body scroll when drawer is open
+    React.useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
     // Get user display name
     const userName = user?.user_metadata?.name || user?.email?.split('@')[0] || 'Devotee';
     const userInitial = userName.charAt(0).toUpperCase();
