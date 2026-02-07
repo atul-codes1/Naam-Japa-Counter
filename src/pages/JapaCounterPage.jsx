@@ -80,7 +80,12 @@ const JapaCounter = ({ activeNaam, setActiveNaam, isDesktop, stats, onIncrement 
     // Haptic Feedback (Premium Feel)
     if (navigator.vibrate) {
       try {
-        navigator.vibrate(5);
+        // Different vibration for Mala completion
+        if (currentCount === 107) { // next count will be 108
+          navigator.vibrate([100, 50, 100]); // Two sharp pulses
+        } else {
+          navigator.vibrate(5); // Tiny tick
+        }
       } catch (e) {
         // Ignore vibration errors
       }
@@ -90,7 +95,7 @@ const JapaCounter = ({ activeNaam, setActiveNaam, isDesktop, stats, onIncrement 
 
     const burstId = burstIdRef.current++;
     setBursts(prev => [...prev, { id: burstId, x, y }]);
-  }, [onIncrement]);
+  }, [onIncrement, currentCount]);
 
   // Determine content source
   const isHome = !urlNaam;

@@ -31,7 +31,7 @@ const LoginModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="login-modal-overlay" onClick={handleOverlayClick}>
-      <div className="login-modal-pro open" onClick={(e) => e.stopPropagation()}>
+      <div className="login-modal-pro bottom-sheet open" onClick={(e) => e.stopPropagation()}>
 
         <div className="login-pro-content">
           {/* Header */}
@@ -40,6 +40,8 @@ const LoginModal = ({ isOpen, onClose }) => {
             <h2 className="pro-title">Radhe Radhe</h2>
             <p className="pro-subtitle">Sign in to save your progress</p>
           </div>
+
+          <div className="pro-drag-handle"></div>
 
           {isSyncing ? (
             <div className="sync-container-pro">

@@ -15,24 +15,13 @@ const CenteredLayout = ({
                 {getHindiName(activeNaam)} नाम जप
             </h1>
 
-
-
-            {/* Aesthetic Stats Button - Moved Above */}
             {/* Aesthetic Stats Button - Moved Above */}
             <div
-                className="flex gap-4 justify-center items-center w-full mb-6 z-20 relative"
+                className="flex gap-4 justify-center items-center w-full mb-8 z-20 relative"
                 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}
             >
                 <button
-                    className="view-stats-btn animate-fade-in-up delay-200"
-                    style={{
-                        width: '150px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        margin: '0 8px',
-                        background: 'rgba(255, 255, 255, 0.4)'
-                    }}
+                    className="view-stats-btn animate-fade-in-up"
                     onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering tap count
                         window.location.href = '/statistics';
@@ -40,19 +29,12 @@ const CenteredLayout = ({
                     aria-label="Save My Progress"
                 >
                     <span className="stats-icon">📊</span>
-                    <span className="stats-label text-xs font-medium">Save Progress</span>
+                    <span className="stats-label">Save Progress</span>
                 </button>
 
                 <button
-                    className="view-stats-btn animate-fade-in-up delay-250"
-                    style={{
-                        width: '150px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        margin: '0 8px',
-                        background: 'rgba(255, 255, 255, 0.4)'
-                    }}
+                    className="view-stats-btn animate-fade-in-up"
+                    style={{ animationDelay: '0.1s' }}
                     onClick={(e) => {
                         e.stopPropagation();
                         window.location.href = '/leaderboard';
@@ -60,7 +42,7 @@ const CenteredLayout = ({
                     aria-label="Check my Rank"
                 >
                     <span className="stats-icon">🏆</span>
-                    <span className="stats-label text-xs font-medium">Check Rank</span>
+                    <span className="stats-label">Check Rank</span>
                 </button>
             </div>
 
@@ -69,7 +51,7 @@ const CenteredLayout = ({
             >
                 <ProgressCircle
                     count={currentCount}
-                    size={200}
+                    size={!isDesktop ? 170 : 200}
                     showCelebration={showCelebration}
                     secondsElapsed={secondsElapsed}
                     formatTime={formatTime}

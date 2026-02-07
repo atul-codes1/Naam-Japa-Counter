@@ -9,8 +9,8 @@ const ProgressCircle = ({ count, size, showCelebration, secondsElapsed, formatTi
     const bubbleIdRef = useRef(0);
 
     useEffect(() => {
-        setScale(0.8);
-        const timer = setTimeout(() => setScale(1), 150);
+        setScale(0.98);
+        const timer = setTimeout(() => setScale(1), 100);
         return () => clearTimeout(timer);
     }, [count]);
 
@@ -77,7 +77,7 @@ const ProgressCircle = ({ count, size, showCelebration, secondsElapsed, formatTi
             <div
                 className="progress-text-premium"
                 style={{
-                    transform: `scale(${scale})`
+                    transform: `translate(-50%, -50%) scale(${scale})`
                 }}
             >
                 <span className="main-number" style={{ fontSize: size * 0.32 }}>

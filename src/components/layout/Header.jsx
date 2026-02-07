@@ -1,14 +1,36 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import useAuth from '@/hooks/useAuth';
 
 const Header = ({ activeNaam, isDesktop, onMenuClick }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Contextual: Show back button instead of menu if we are NOT on root
+    const showBackButton = !isDesktop && (
+        location.pathname.startsWith('/naam-japa-counter/') ||
+        location.pathname === '/statistics' ||
+        location.pathname === '/leaderboard'
+    );
+
+    const handleBack = () => navigate(-1);
+
     return (
-        <div className="header">
+        <div className={`header ${!isDesktop ? 'native-glass' : ''}`}>
             <div className="header-content">
-                <div className="header-title" aria-label={`Current Mantra: ${activeNaam}`}>📿 {activeNaam} Naam</div>
+                {!isDesktop && showBackButton && (
+                    <button className="back-button" onClick={handleBack}>
+                        <span className="back-icon">←</span>
+                    </button>
+                )}
+
+                <div className="header-title" aria-label={`Current Mantra: ${activeNaam}`}>
+                    {showBackButton ? activeNaam : `📿 ${activeNaam} Naam`}
+                </div>
+
                 <div className="header-spacer" />
+
                 {isDesktop ? (
                     <>
                         <HoverNavButton label="Home" to="/" />
@@ -22,9 +44,6 @@ const Header = ({ activeNaam, isDesktop, onMenuClick }) => {
                     </>
                 ) : (
                     <div className="header-mobile-menu-container">
-                        <button className="menu-button" onClick={onMenuClick}>
-                            <span className="menu-icon">☰</span>
-                        </button>
                         <HeaderAuth />
                     </div>
                 )}
