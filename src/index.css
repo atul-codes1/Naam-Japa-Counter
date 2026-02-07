@@ -3334,4 +3334,95 @@
       margin-top: 10px;
       font-size: 42px;
     }
+
+    .stats-wrapper {
+      margin-top: 15px;
+      gap: 10px;
+    }
+
+    .library-seo-section {
+      margin-top: 20px;
+    }
+  }
+
+  /* --- Radha Rani Quote Styles --- */
+  .quote-card-container {
+    padding: 0 4px;
+    margin-bottom: 20px;
+  }
+
+  .quote-card {
+    background: linear-gradient(135deg, #FFF0F5 0%, #FFFFFF 100%);
+    border: 1px solid #FFCDD2;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.08);
+    position: relative;
+    overflow: hidden;
+    width: auto;
+    /* Use auto to respect parent padding */
+    max-width: 100%;
+    margin: 0 auto;
+    /* Center it if it shrinks */
+    box-sizing: border-box;
+  }
+
+  .quote-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    color: #880E4F;
+    text-align: center;
+    line-height: 1.5;
+    font-style: italic;
+    transition: opacity 0.3s ease;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    /* Flexbox shrink fix */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .quote-text.fade-out {
+    opacity: 0;
+  }
+
+  .quote-text.fade-in {
+    opacity: 1;
+  }
+
+  .generate-quote-btn {
+    background: white;
+    border: 1px solid #FF80AB;
+    color: #D81B60;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(233, 30, 99, 0.1);
+  }
+
+  .generate-quote-btn:hover {
+    background: #D81B60;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(233, 30, 99, 0.2);
+  }
+
+  .generate-quote-btn:active {
+    transform: scale(0.95);
   }
