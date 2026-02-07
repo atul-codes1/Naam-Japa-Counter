@@ -69,7 +69,7 @@ const CenteredLayout = ({
             >
                 <ProgressCircle
                     count={currentCount}
-                    size={180}
+                    size={200}
                     showCelebration={showCelebration}
                     secondsElapsed={secondsElapsed}
                     formatTime={formatTime}
