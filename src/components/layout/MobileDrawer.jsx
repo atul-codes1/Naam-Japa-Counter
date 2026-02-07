@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
-import RadhaRaniQuote from '../japa/RadhaRaniQuote';
+
 
 const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
     const { user, isAuthenticated, openLogin } = useAuth();
@@ -113,8 +113,7 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose }) => {
                         onClick={handleLeaderboardClick}
                     />
 
-                    <div className="drawer-divider-modern" />
-                    <RadhaRaniQuote />
+
                 </div>
 
                 {/* 3. Footer Actions */}
