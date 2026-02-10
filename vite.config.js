@@ -18,9 +18,9 @@ export default defineConfig({
             },
             includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg', 'icon.svg'],
             manifest: {
-                name: 'Naam Japa Counter',
-                short_name: 'JapaCounter',
-                description: 'A beautiful and minimalist Naam Japa Counter for your spiritual journey.',
+                name: 'Naam Jaap Counter',
+                short_name: 'Naam Jaap',
+                description: 'A beautiful and minimalist Naam Jaap Counter for your spiritual journey.',
                 theme_color: '#E91E63',
                 background_color: '#ffffff',
                 display: 'standalone',
