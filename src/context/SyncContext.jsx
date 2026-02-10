@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { pushPendingIncrements, fetchServerState } from '@/services/syncService';
 
@@ -102,7 +102,7 @@ export const SyncProvider = ({ children }) => {
         return `${year}-${month}-${day}`;
     };
 
-    const updateJapaCount = async (naam) => {
+    const updateJapaCount = useCallback(async (naam) => {
         const today = getTodayStr();
 
         setPendingIncrements(prev => {
@@ -116,12 +116,12 @@ export const SyncProvider = ({ children }) => {
 
             return state;
         });
-    };
+    }, []);
 
     /**
      * DERIVED STATE UI HELPERS
      */
-    const getDeityStats = (naam) => {
+    const getDeityStats = useCallback((naam) => {
         const today = getTodayStr();
 
         // 1. Get Base from Server Cache
@@ -156,7 +156,7 @@ export const SyncProvider = ({ children }) => {
             totalJapa: finalTotalCounts,
             todaysJapa: finalTodaysJapa
         };
-    };
+    }, [cachedServerState, pendingIncrements]);
 
     /**
      * FULL MERGE: For Statistics Page
@@ -165,7 +165,7 @@ export const SyncProvider = ({ children }) => {
      * FULL MERGE: For Statistics Page
      * Memoized to prevent App-wide re-renders
      */
-    const allMergedStats = React.useMemo(() => {
+    const allMergedStats = useMemo(() => {
         const merged = JSON.parse(JSON.stringify(cachedServerState));
 
         Object.entries(pendingIncrements).forEach(([naam, dates]) => {
@@ -188,14 +188,16 @@ export const SyncProvider = ({ children }) => {
         return merged;
     }, [cachedServerState, pendingIncrements]);
 
+    const value = useMemo(() => ({
+        cachedServerState,
+        pendingIncrements,
+        updateJapaCount,
+        getDeityStats,
+        allMergedStats
+    }), [cachedServerState, pendingIncrements, updateJapaCount, getDeityStats, allMergedStats]);
+
     return (
-        <SyncContext.Provider value={{
-            cachedServerState,
-            pendingIncrements,
-            updateJapaCount,
-            getDeityStats,
-            allMergedStats
-        }}>
+        <SyncContext.Provider value={value}>
             {children}
         </SyncContext.Provider>
     );

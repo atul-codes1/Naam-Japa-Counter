@@ -5,8 +5,9 @@ import AestheticStatCard from './AestheticStatCard';
 
 const CenteredLayout = ({
     activeNaam, currentCount, malaCount, totalJapa, todaysJapa,
-    secondsElapsed, formatTime, getHindiName, isDesktop, showCelebration
+    getHindiName, isDesktop, showCelebration, isPaused
 }) => {
+    const navigate = useNavigate();
     return (
         <div className="centered-layout flex flex-col items-center w-full">
             <h1
@@ -24,7 +25,7 @@ const CenteredLayout = ({
                     className="view-stats-btn animate-fade-in-up"
                     onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering tap count
-                        window.location.href = '/statistics';
+                        navigate('/statistics');
                     }}
                     aria-label="Save My Progress"
                 >
@@ -37,7 +38,7 @@ const CenteredLayout = ({
                     style={{ animationDelay: '0.1s' }}
                     onClick={(e) => {
                         e.stopPropagation();
-                        window.location.href = '/leaderboard';
+                        navigate('/leaderboard');
                     }}
                     aria-label="Check my Rank"
                 >
@@ -53,8 +54,7 @@ const CenteredLayout = ({
                     count={currentCount}
                     size={!isDesktop ? 170 : 200}
                     showCelebration={showCelebration}
-                    secondsElapsed={secondsElapsed}
-                    formatTime={formatTime}
+                    isPaused={isPaused}
                 />
             </div>
 

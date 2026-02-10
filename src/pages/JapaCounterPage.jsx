@@ -19,7 +19,6 @@ const JapaCounter = ({ activeNaam, setActiveNaam, isDesktop, stats, onIncrement 
   }, [urlNaam, activeNaam, setActiveNaam]);
 
   const [bursts, setBursts] = useState([]);
-  const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const burstIdRef = useRef(0);
@@ -34,32 +33,7 @@ const JapaCounter = ({ activeNaam, setActiveNaam, isDesktop, stats, onIncrement 
     }
   }, [totalMalas, currentCount, totalJapa]);
 
-  // Timer
-  // ... rest of timer logic
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (!isPaused) {
-        setSecondsElapsed(prev => prev + 1);
-      }
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [isPaused]);
 
-  // Handle visibility change (pause when tab is hidden)
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      setIsPaused(document.hidden);
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, []);
-
-  const formatTime = (seconds) => {
-    const hrs = Math.floor(seconds / 3600).toString().padStart(2, '0');
-    const mins = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-    const secs = (seconds % 60).toString().padStart(2, '0');
-    return `${hrs}:${mins}:${secs}`;
-  };
 
   const removeBurst = useCallback((id) => {
     setBursts(prev => prev.filter(b => b.id !== id));
@@ -127,11 +101,10 @@ const JapaCounter = ({ activeNaam, setActiveNaam, isDesktop, stats, onIncrement 
             malaCount={totalMalas}
             totalJapa={totalJapa}
             todaysJapa={todaysJapa}
-            secondsElapsed={secondsElapsed}
-            formatTime={formatTime}
             getHindiName={getHindiName}
             isDesktop={isDesktop}
             showCelebration={showCelebration}
+            isPaused={isPaused}
           />
         </div>
       </div>

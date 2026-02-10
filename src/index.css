@@ -139,6 +139,11 @@ html {
   /* Global tap highlight removel */
 }
 
+.tap-area:active {
+  transform: scale(0.98);
+  transition: transform 0.05s ease-out;
+}
+
 /* iOS Momentum Scrolling */
 * {
   -webkit-overflow-scrolling: touch;
@@ -603,6 +608,11 @@ textarea,
 .stat-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+.stat-card:active {
+  transform: translateY(0) scale(0.97);
+  transition: transform 0.1s ease-out;
 }
 
 /* --- Mobile Optimization: Compact Stats Bar (Matching Library Layout) --- */
@@ -2631,71 +2641,7 @@ textarea,
   box-shadow: 20px 0 40px rgba(0, 0, 0, 0.05);
 }
 
-.drawer-header-modern {
-  padding: 40px 24px 30px;
-  /* More breathing room */
-  background: radial-gradient(circle at top right, #FFF0F5 0%, transparent 60%);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
-  position: relative;
-}
 
-/* Add a subtle sparkle or decorative element */
-.drawer-header-modern::after {
-  content: "✨";
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 20px;
-  opacity: 0.2;
-}
-
-.drawer-user-info {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  /* Relaxed spacing */
-}
-
-.drawer-avatar {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px;
-  box-shadow: 0 8px 20px rgba(255, 64, 129, 0.15);
-  border: 4px solid rgba(255, 255, 255, 0.8);
-  position: relative;
-  z-index: 10;
-}
-
-.drawer-user-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.drawer-greeting {
-  font-size: 11px;
-  color: #999;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.drawer-username {
-  font-size: 20px;
-  font-weight: 800;
-  color: #333;
-  font-family: 'Outfit', sans-serif;
-  letter-spacing: -0.5px;
-  background: linear-gradient(45deg, #333, #666);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 .drawer-content {
   flex: 1;
@@ -3107,7 +3053,7 @@ textarea,
 /* --- Modern Drawer Header --- */
 .drawer-header-modern {
   background: linear-gradient(135deg, #D81B60 0%, #FF4081 100%);
-  padding: 24px 24px 20px;
+  padding: calc(20px + env(safe-area-inset-top)) 24px 20px;
   color: white;
   position: relative;
   overflow: hidden;
@@ -3688,32 +3634,6 @@ textarea,
 }
 
 /* --- Leaderboard Controls Row --- */
-.leaderboard-controls-row {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-  /* Align items nicely */
-  flex-wrap: wrap;
-  /* Stack on mobile */
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-
-/* --- Leaderboard Controls Row --- */
-.leaderboard-controls-row {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-
-/* --- Leaderboard Layout Refinements --- */
 .leaderboard-controls-row {
   display: flex;
   gap: 20px;

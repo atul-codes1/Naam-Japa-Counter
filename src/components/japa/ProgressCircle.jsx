@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import BubbleBurst from '../animation/BubbleBurst';
 import CelebrationStars from '../animation/CelebrationStars';
+import TimerDisplay from './TimerDisplay';
 
-const ProgressCircle = ({ count, size, showCelebration, secondsElapsed, formatTime }) => {
+const ProgressCircle = ({ count, size, showCelebration, isPaused }) => {
     const progress = (count % 109) / 108;
     const [scale, setScale] = useState(1);
     const [bubbles, setBubbles] = useState([]);
@@ -87,7 +88,7 @@ const ProgressCircle = ({ count, size, showCelebration, secondsElapsed, formatTi
                     / 108
                 </span>
                 <span className="progress-timer-mini">
-                    {formatTime ? formatTime(secondsElapsed) : '00:00'}
+                    <TimerDisplay isPaused={isPaused} />
                 </span>
             </div>
 

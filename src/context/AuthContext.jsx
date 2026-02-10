@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/services/supabase';
 import { syncOnLogin } from '@/services/syncService';
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
     return () => subscription.unsubscribe();
   }, [navigate, redirectAfterLogin]);
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = useCallback(async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -86,9 +86,9 @@ export const AuthProvider = ({ children }) => {
       console.error('Login error:', error);
       alert('Login failed. Please try again.');
     }
-  };
+  }, []);
 
-  const signOut = () => {
+  const signOut = useCallback(() => {
     console.log('🚪 Logout clicked!');
 
     // Clear Supabase session storage directly
@@ -96,27 +96,29 @@ export const AuthProvider = ({ children }) => {
 
     // Force reload to clear all state
     window.location.replace('/');
-  };
+  }, []);
 
-  const openLogin = React.useCallback((redirectPath = null) => {
+  const openLogin = useCallback((redirectPath = null) => {
     if (redirectPath) setRedirectAfterLogin(redirectPath);
     setIsLoginOpen(true);
   }, []);
 
-  const closeLogin = React.useCallback(() => setIsLoginOpen(false), []);
+  const closeLogin = useCallback(() => setIsLoginOpen(false), []);
+
+  const value = useMemo(() => ({
+    user,
+    session,
+    loading,
+    signInWithGoogle,
+    signOut,
+    openLogin,
+    closeLogin,
+    isAuthenticated: !!user,
+    isSyncing
+  }), [user, session, loading, signInWithGoogle, signOut, openLogin, closeLogin, isSyncing]);
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      session,
-      loading,
-      signInWithGoogle,
-      signOut,
-      openLogin,
-      closeLogin,
-      isAuthenticated: !!user,
-      isSyncing
-    }}>
+    <AuthContext.Provider value={value}>
       {children}
       <LoginModal isOpen={isLoginOpen} onClose={closeLogin} />
     </AuthContext.Provider>
