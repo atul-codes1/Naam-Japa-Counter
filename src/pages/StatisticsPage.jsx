@@ -89,7 +89,7 @@ const StatisticsPage = ({ japaStats }) => {
                     </h1>
 
                     {/* Key Stats Cards */}
-                    <div className="stats-container stats-page-grid">
+                    <div className="stats-container stats-mobile-grid">
                         <div
                             className="stat-card stats-page-card animate-fade-in-up delay-200"
                         >

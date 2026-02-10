@@ -9,6 +9,7 @@ const BottomNavigation = () => {
     const navItems = [
         { id: 'home', label: 'Home', path: '/', icon: '🏠' },
         { id: 'library', label: 'Library', path: '/naam-japa-counter', icon: '📿' },
+        { id: 'rank', label: 'Rank', path: '/leaderboard', icon: '🏆' },
         { id: 'stats', label: 'Journey', path: '/statistics', icon: '📈' },
         { id: 'settings', label: 'Menu', action: 'toggleDrawer', icon: '☰' }
     ];
@@ -25,6 +26,15 @@ const BottomNavigation = () => {
                     key={item.id}
                     className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
                     onClick={() => {
+                        // Haptic feedback
+                        if (navigator.vibrate) {
+                            try {
+                                navigator.vibrate(5); // Light tap feedback
+                            } catch (e) {
+                                // Ignore vibration errors
+                            }
+                        }
+
                         if (item.action === 'toggleDrawer') {
                             // We will handle drawer toggle via a custom event or shared state
                             window.dispatchEvent(new CustomEvent('toggle-drawer'));

@@ -1,3 +1,75 @@
+/* ========================================
+   DESIGN TOKENS - Native App Feel 
+   ======================================== */
+:root {
+  /* Typography */
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-hindi: 'Noto Sans Devanagari', sans-serif;
+
+  /* Brand Colors */
+  --primary: #FF4081;
+  --primary-soft: #FFE0EC;
+  --primary-dark: #880E4F;
+  --accent: #FF80AB;
+  --success: #4CAF50;
+  --warning: #FF9800;
+  --error: #F44336;
+
+  /* Surface & Background */
+  --surface: #FFFFFF;
+  --surface-elevated: #FAFAFA;
+  --background: #F5F5F5;
+  --background-alt: #FAFAFA;
+
+  /* Text */
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --text-tertiary: #9E9E9E;
+  --text-on-primary: #FFFFFF;
+
+  /* Borders & Dividers */
+  --divider: rgba(0, 0, 0, 0.08);
+  --border-light: rgba(0, 0, 0, 0.06);
+  --border-medium: rgba(0, 0, 0, 0.12);
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.16);
+  --shadow-glow: 0 0 20px rgba(255, 64, 129, 0.3);
+  --shadow-glow-strong: 0 0 30px rgba(255, 64, 129, 0.5);
+
+  /* Spacing (8px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 @media (max-width: 1000px) {
   body {
     background-color: #fff;
@@ -7,12 +79,14 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-smooth: always;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  color: var(--text-primary);
+  background: var(--background);
 }
 
 * {
@@ -26,27 +100,101 @@ code {
     monospace;
 }
 
+/* ========================================
+   SMOOTH SCROLLING & ANIMATIONS
+   ======================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* iOS Momentum Scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Universal Button Press Feedback */
+.btn-press,
+button:not(.no-press) {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn-press:active,
+button:not(.no-press):active {
+  transform: scale(0.96);
+}
+
+/* Shimmer Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg,
+      var(--surface-elevated) 0%,
+      var(--background) 50%,
+      var(--surface-elevated) 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+/* Pulse Loading Animation */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+
 .app-container {
   position: relative;
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
-  /* --- Phase 5: Native Polish --- */
+  /* --- Phase 5: Native Polish (Default for Mobile App feel) --- */
   overscroll-behavior: none;
   /* Disable pull-to-refresh */
   user-select: none;
   /* Prevent text selection like an app */
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
-  /* Remove the blue tap highlight */
+  /* Remove blue tap highlight */
   -webkit-touch-callout: none;
-  /* Disable long-press context menu on images */
+  /* Disable long-press context menu */
   padding-bottom: calc(75px + env(safe-area-inset-bottom));
 }
 
+/* Restore native browser behavior for Web Mode */
+.app-container.is-web-mode {
+  overscroll-behavior: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* Restore native browser behavior for Desktop */
 @media (min-width: 1000px) {
   .app-container {
-    padding-bottom: 0px;
+    overscroll-behavior: auto;
+    user-select: text;
+    -webkit-user-select: text;
+    -webkit-touch-callout: default;
+    padding-bottom: 0px !important;
   }
 }
 
@@ -166,20 +314,20 @@ textarea,
 .header.native-glass {
   height: calc(60px + env(safe-area-inset-top));
   padding-top: env(safe-area-inset-top);
-  background: #000;
-  /* Set to black as requested */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.85) 100%);
+  backdrop-filter: blur(30px) saturate(150%);
+  -webkit-backdrop-filter: blur(30px) saturate(150%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .header.native-glass .header-title {
   color: #fff;
-  /* White text for black header */
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 700;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .back-button {
@@ -327,7 +475,7 @@ textarea,
 .centered-content {
   max-width: 900px;
   margin: 0 auto;
-  padding: 5px 20px 20px;
+  padding: var(--space-2) var(--space-6) var(--space-6);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -342,24 +490,23 @@ textarea,
 }
 
 .title-text {
+  font-family: var(--font-hindi);
   font-size: 54px;
-  font-weight: bold;
-  color: #880E4F;
-  letter-spacing: -1px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  letter-spacing: -0.5px;
   text-align: center;
+  text-shadow: 0 2px 8px rgba(136, 14, 79, 0.1);
 }
 
 .timer-badge {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
-  /* Reduced from 6px 14px */
+  padding: var(--space-1) 10px;
   background: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  /* Thinner border */
-  border-radius: 20px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
   transform: scale(0.8);
-  /* Further reduction from 0.9 */
 }
 
 .timer-icon {
@@ -399,50 +546,109 @@ textarea,
   gap: 16px;
   justify-content: center;
   width: 100%;
-  max-width: 600px;
-  /* Prevent stretching too wide on desktop */
+  /* Removed max-width to match chart width */
 }
 
 .stat-card {
   flex: 1;
-  /* Allow growing */
   min-width: 100px;
-  /* Minimum width before shrinking too much */
   max-width: 160px;
-  /* Original size */
-  padding: 18px;
-  background: white;
-  border-radius: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  /* Restored original max-width for desktop */
+
+  padding: var(--space-4) var(--space-3);
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-elevated) 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  transition: all 0.2s;
+  gap: var(--space-1);
+  transition: all var(--transition-base);
   cursor: default;
 }
 
-/* --- Mobile Optimization: Compact Stats Bar --- */
-@media (max-width: 480px) {
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* --- Mobile Optimization: Compact Stats Bar (Matching Library Layout) --- */
+
+/* Add spacing for Desktop Statistics Page (charts below) */
+.stats-container.stats-mobile-grid {
+  margin-bottom: 2rem;
+}
+
+/* Target mobile and tablets (PWA) for 2-column grid */
+@media (max-width: 768px) {
+
+  /* Default stats container */
   .stats-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    /* 3 Equal Columns */
-    gap: 8px;
-    /* Tighter gap */
-    padding: 0 10px;
-    /* Side padding to prevent edge touching */
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    padding: 0 var(--space-3);
+  }
+
+  /* Specific override for Statistics Page to MATCH LIBRARY GRID */
+  .stats-container.stats-mobile-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    padding: 10px !important;
+    /* Match library-grid padding */
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Ensure cards in this grid match Library Card dimensions but smaller */
+  .stats-container.stats-mobile-grid .stat-card {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    /* Override base max-width for grid */
+    height: 130px !important;
+    /* Reduced from 160px */
+    padding: 10px !important;
+    margin: 0 !important;
+    flex: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Adjust inner elements for the fixed height card */
+  .stats-container.stats-mobile-grid .stat-card .stat-card-icon {
+    font-size: 24px !important;
+    /* Reduced from 28px */
+    margin-bottom: 6px !important;
+    display: block !important;
+  }
+
+  .stats-container.stats-mobile-grid .stat-card .stat-card-label {
+    font-size: 11px !important;
+    margin-bottom: 2px !important;
+    white-space: normal !important;
+    /* Allow wrapping */
+    text-align: center !important;
+    line-height: 1.2 !important;
+  }
+
+  .stats-container.stats-mobile-grid .stat-card .stat-card-value {
+    font-size: 18px !important;
+    /* Reduced from 20px */
+    font-weight: 700 !important;
   }
 
   .stat-card {
     min-width: 0;
-    /* Allow shrinking below min-width */
-    padding: 12px 4px;
-    /* drastically reduced padding */
-    border-radius: 12px;
+    padding: 12px 8px;
+    /* Reduced padding */
+    border-radius: var(--radius-md);
   }
 
-  /* Target inner text for mobile scaling */
+  /* General mobile overrides (kept for other pages if needed) */
   .stat-card h3 {
     font-size: 11px !important;
     /* Smaller labels */
@@ -450,8 +656,33 @@ textarea,
   }
 
   .stat-card span {
-    font-size: 16px !important;
+    font-size: 18px !important;
     /* Smaller values */
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+  .stats-container.stats-mobile-grid {
+    gap: 8px !important;
+    padding: 5px !important;
+  }
+
+  .stats-container.stats-mobile-grid .stat-card {
+    height: 140px !important;
+  }
+
+  .stat-card {
+    padding: 10px 4px;
+  }
+
+  /* Even smaller text for tiny screens */
+  .stat-card h3 {
+    font-size: 10px !important;
+  }
+
+  .stat-card span {
+    font-size: 16px !important;
   }
 }
 
@@ -1202,14 +1433,19 @@ textarea,
 }
 
 .progress-svg {
-  filter: drop-shadow(0 0 10px rgba(255, 64, 129, 0.2));
-  transition: filter 0.3s ease;
+  filter: drop-shadow(0 0 16px rgba(255, 64, 129, 0.3)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+  transition: filter var(--transition-base);
+}
+
+.progress-svg:hover {
+  filter: drop-shadow(0 0 24px rgba(255, 64, 129, 0.5)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
 }
 
 .progress-track {
-  stroke: rgba(255, 255, 255, 0.65);
+  stroke: rgba(255, 255, 255, 0.7);
   stroke-width: 8;
   fill: none;
+  opacity: 0.6;
 }
 
 .progress-bar {
@@ -1217,7 +1453,8 @@ textarea,
   stroke-width: 12;
   fill: none;
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 0 8px rgba(255, 64, 129, 0.6));
+  transition: stroke-dashoffset var(--transition-slow), filter var(--transition-base);
 }
 
 /* Naam Library Page Styles */
@@ -1303,17 +1540,17 @@ textarea,
 .library-card {
   width: 175px;
   height: 215px;
-  background: white;
-  border-radius: 28px;
-  border: 1.5px solid transparent;
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-elevated) 100%);
+  border-radius: var(--radius-2xl);
+  border: 1.5px solid var(--border-light);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-slow);
   will-change: transform, border-color, box-shadow;
 }
 
@@ -1328,11 +1565,12 @@ textarea,
 .library-card:hover {
   transform: translateY(-8px) scale(1.02);
   border-color: rgba(255, 64, 129, 0.65);
-  box-shadow: 0 12px 30px rgba(255, 64, 129, 0.15);
+  box-shadow: var(--shadow-glow), var(--shadow-lg);
 }
 
 .library-card:active {
-  transform: scale(0.98);
+  transform: scale(0.96) translateY(-4px);
+  box-shadow: var(--shadow-sm);
 }
 
 .library-card:nth-child(1) {
@@ -1368,11 +1606,11 @@ textarea,
 }
 
 .library-card-hindi {
-  font-family: 'Mukta', sans-serif;
+  font-family: var(--font-hindi);
   font-size: 20px;
   font-weight: 700;
-  color: #880E4F;
-  margin-bottom: 4px;
+  color: var(--primary-dark);
+  margin-bottom: var(--space-1);
 }
 
 @media (max-width: 768px) {
@@ -1383,9 +1621,9 @@ textarea,
 }
 
 .library-card-name {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-display);
   font-size: 14px;
-  color: #999;
+  color: var(--text-secondary);
   letter-spacing: 0.5px;
   text-transform: uppercase;
   font-weight: 600;

@@ -96,6 +96,31 @@ function App() {
     };
   }, []);
 
+  // Global Reminder Check: ping SW whenever user returns to the app
+  useEffect(() => {
+    const pingSW = () => {
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'CHECK_REMINDER' });
+      }
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') pingSW();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    // Also check on initial mount
+    pingSW();
+
+    // Periodic main-thread check every 60 seconds (backup for when SW sleeps)
+    const intervalId = setInterval(pingSW, 60000);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      clearInterval(intervalId);
+    };
+  }, []);
+
   console.log('App Render State:', { isPWAInstalled, hasDeferredPrompt: !!deferredPrompt });
 
   const handleSelectNaam = (naam) => {
@@ -131,10 +156,10 @@ function App() {
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
             className="scroll-container"
           >
             <Suspense fallback={<PageLoader />}>

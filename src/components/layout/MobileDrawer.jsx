@@ -9,9 +9,13 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose, deferredPrompt, isPWAInstal
     const [reminderTime, setReminderTime] = React.useState('05:00');
     const [showPermissionHelp, setShowPermissionHelp] = React.useState(false);
     const [showIOSInstallGuide, setShowIOSInstallGuide] = React.useState(false);
+    const [showIOSChromeWarning, setShowIOSChromeWarning] = React.useState(false);
     const [isIOS, setIsIOS] = React.useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+
+    const [iosBrowser, setIosBrowser] = React.useState('safari'); // 'safari', 'chrome', 'edge', 'generic'
+    const [linkCopied, setLinkCopied] = React.useState(false);
 
     // Load notification settings
     React.useEffect(() => {
@@ -20,10 +24,62 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose, deferredPrompt, isPWAInstal
         setNotificationsEnabled(enabled);
         setReminderTime(time);
 
-        // Detect iOS
+        // Detect iOS and Browser Type
         const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         setIsIOS(isIOSDevice);
+
+        if (isIOSDevice) {
+            const ua = navigator.userAgent;
+            if (ua.match(/CriOS/i)) {
+                setIosBrowser('chrome');
+            } else if (ua.match(/EdgiOS/i)) {
+                setIosBrowser('edge');
+            } else if (ua.match(/FxiOS/i)) {
+                setIosBrowser('firefox');
+            } else {
+                setIosBrowser('safari');
+            }
+        }
     }, []);
+
+    // Main-thread fallback: ping SW to check reminder on visibility change
+    React.useEffect(() => {
+        const pingSW = () => {
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({ type: 'CHECK_REMINDER' });
+            }
+        };
+
+        // Check when user returns to the app/tab
+        const handleVisibility = () => {
+            if (document.visibilityState === 'visible') {
+                pingSW();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibility);
+        // Also check on mount
+        pingSW();
+
+        return () => document.removeEventListener('visibilitychange', handleVisibility);
+    }, []);
+
+    const sendTestNotification = () => {
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ type: 'TEST_NOTIFICATION' });
+        } else {
+            // Fallback: use Notification API directly
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('Japa Test Notification 🌸', {
+                    body: 'Your notification system is working perfectly! Radhe Radhe! 🙏',
+                    icon: '/icon.svg'
+                });
+            } else {
+                alert('Please enable notifications first!');
+            }
+        }
+    };
+
 
     // Helper for IndexedDB access
     const writeToIDB = (key, value) => {
@@ -63,9 +119,21 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose, deferredPrompt, isPWAInstal
 
     const toggleNotifications = async () => {
         if (!notificationsEnabled) {
+            // Check if iOS user is on a non-Safari browser (notifications won't work)
+            if (isIOS && iosBrowser !== 'safari') {
+                setShowIOSChromeWarning(true);
+                return;
+            }
+
+            // Check if iOS user is in browser (not installed PWA)
+            if (isIOS && !isPWAInstalled) {
+                setShowIOSChromeWarning(true);
+                return;
+            }
+
             // Check if browser supports notifications
             if (!('Notification' in window)) {
-                alert('This browser does not support desktop notifications.');
+                alert('This browser does not support notifications.');
                 return;
             }
 
@@ -174,7 +242,23 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose, deferredPrompt, isPWAInstal
     };
 
     const handleIOSInstall = () => {
-        setShowIOSInstallGuide(true);
+        if (isIOS && iosBrowser !== 'safari') {
+            // Non-Safari on iOS: copy URL and show Safari redirect guide
+            copyAndShowSafariGuide();
+        } else {
+            setShowIOSInstallGuide(true);
+        }
+    };
+
+    const copyAndShowSafariGuide = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.origin);
+            setLinkCopied(true);
+        } catch (err) {
+            // Fallback for clipboard API failure
+            setLinkCopied(false);
+        }
+        setShowIOSChromeWarning(true);
     };
 
 
@@ -297,6 +381,15 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose, deferredPrompt, isPWAInstal
                             </div>
                         )}
                     </div>
+                    {notificationsEnabled && (
+                        <button
+                            className="guide-ok-btn"
+                            style={{ marginTop: '8px', width: '100%', fontSize: '13px' }}
+                            onClick={sendTestNotification}
+                        >
+                            🔔 Send Test Notification
+                        </button>
+                    )}
 
                     <div className="drawer-divider-modern" />
 
@@ -347,16 +440,32 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose, deferredPrompt, isPWAInstal
                         <div className="guide-content">
                             <button className="guide-close" onClick={() => setShowIOSInstallGuide(false)}>×</button>
                             <h3>Install Japa Counter</h3>
-                            <p>Install this app on your iPhone for the best experience:</p>
+                            <p>Install on your iPhone ({iosBrowser === 'safari' ? 'Safari' : iosBrowser}) for the best experience:</p>
+
                             <div className="guide-steps">
-                                <div className="guide-step">
-                                    <span className="step-num">1</span>
-                                    <p>Tap the <b>Share</b> icon <span className="ios-icon">⎋</span> (bottom center)</p>
-                                </div>
-                                <div className="guide-step">
-                                    <span className="step-num">2</span>
-                                    <p>Scroll down and tap <b>'Add to Home Screen'</b> <span className="ios-icon">⊞</span></p>
-                                </div>
+                                {iosBrowser === 'safari' ? (
+                                    <>
+                                        <div className="guide-step">
+                                            <span className="step-num">1</span>
+                                            <p>Tap the <b>Share</b> icon <span className="ios-icon">⎋</span> <br /><span className="step-hint">(Bottom Center of screen)</span></p>
+                                        </div>
+                                        <div className="guide-step">
+                                            <span className="step-num">2</span>
+                                            <p>Scroll down and tap <b>'Add to Home Screen'</b> <span className="ios-icon">⊞</span></p>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="guide-step">
+                                            <span className="step-num">1</span>
+                                            <p>Tap the <b>Menu</b> or <b>Share</b> icon <span className="ios-icon">⋮ / ⎋</span> <br /><span className="step-hint">(Top Right of screen)</span></p>
+                                        </div>
+                                        <div className="guide-step">
+                                            <span className="step-num">2</span>
+                                            <p>Select <b>'Add to Home Screen'</b> <span className="ios-icon">⊞</span></p>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                             <button className="guide-ok-btn" onClick={() => setShowIOSInstallGuide(false)}>Got it!</button>
                         </div>
@@ -378,6 +487,43 @@ const MobileDrawer = ({ isOpen, activeNaam, onClose, deferredPrompt, isPWAInstal
                         <button className="help-refresh-btn" onClick={() => window.location.reload()}>
                             I've allowed it, Refresh App
                         </button>
+                    </div>
+                )}
+
+                {showIOSChromeWarning && (
+                    <div className="ios-install-guide animate-fade-in">
+                        <div className="guide-content">
+                            <button className="guide-close" onClick={() => { setShowIOSChromeWarning(false); setLinkCopied(false); }}>×</button>
+                            <h3>📱 Install via Safari</h3>
+                            {linkCopied && (
+                                <div style={{ background: '#e8f5e9', color: '#2e7d32', padding: '10px 14px', borderRadius: '10px', marginBottom: '12px', fontSize: '14px', fontWeight: '600', textAlign: 'center' }}>
+                                    ✅ Link Copied to Clipboard!
+                                </div>
+                            )}
+                            <p style={{ fontSize: '14px', lineHeight: '1.6', color: '#555' }}>
+                                On iPhone, the app can only be installed from <b>Safari</b>.
+                            </p>
+                            <div className="guide-steps">
+                                <div className="guide-step">
+                                    <span className="step-num">1</span>
+                                    <p>Open <b>Safari</b> and {linkCopied ? <><b>paste the link</b> from your clipboard</> : <>go to <b>{window.location.origin}</b></>}</p>
+                                </div>
+                                <div className="guide-step">
+                                    <span className="step-num">2</span>
+                                    <p>Tap <b>Share</b> <span className="ios-icon">⎋</span> → <b>Add to Home Screen</b></p>
+                                </div>
+                                <div className="guide-step">
+                                    <span className="step-num">3</span>
+                                    <p>Open the app from your <b>Home Screen</b></p>
+                                </div>
+                            </div>
+                            {!linkCopied && (
+                                <button className="guide-ok-btn" onClick={copyAndShowSafariGuide} style={{ marginBottom: '8px' }}>
+                                    📋 Copy Link
+                                </button>
+                            )}
+                            <button className="guide-ok-btn" onClick={() => { setShowIOSChromeWarning(false); setLinkCopied(false); }}>Got it!</button>
+                        </div>
                     </div>
                 )}
             </div>
